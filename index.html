@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMORVI</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:80px 25px 40px;
+    border-top:4px solid #4d5dff;
+}
+
+h1{
+    color:#8b3f07;
+    font-size:3rem;
+    font-weight:800;
+    margin-bottom:50px;
+    text-align:center;
+}
+
+.btn{
+    width:100%;
+    max-width:320px;
+    background:#564032;
+    color:#fff;
+    text-decoration:none;
+    border-radius:999px;
+    padding:16px 20px;
+    text-align:center;
+    margin-bottom:38px;
+    display:block;
+    transition:.2s ease;
+}
+
+.btn:hover{
+    transform:scale(1.02);
+}
+
+.btn-title{
+    font-size:1.15rem;
+    font-weight:800;
+    text-transform:uppercase;
+    line-height:1.2;
+}
+
+.btn-sub{
+    font-size:.75rem;
+    margin-top:4px;
+    opacity:.95;
+}
+
+.save-btn .btn-title{
+    text-transform:none;
+}
+
+.footer{
+    margin-top:20px;
+    color:#8b3f07;
+    font-size:1.2rem;
+    font-weight:800;
+    font-style:italic;
+}
+
+@media (max-width:480px){
+
+    h1{
+        font-size:2.3rem;
+        margin-bottom:40px;
+    }
+
+    .btn{
+        max-width:290px;
+        margin-bottom:32px;
+    }
+
+    .btn-title{
+        font-size:1rem;
+    }
+
+    .footer{
+        font-size:1.05rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Welcome to AMORVI</h1>
+
+    <a href="https://wa.me/c/919992206060" class="btn">
+        <div class="btn-title">VIEW CATALOGUE</div>
+        <div class="btn-sub">Explore 1000+ products</div>
+    </a>
+
+    <a href="https://www.instagram.com/amorvi.in" target="_blank" class="btn">
+        <div class="btn-title">FOLLOW US</div>
+        <div class="btn-sub">Get newest updates on Instagram</div>
+    </a>
+
+    <a href="https://whatsapp.com/channel/0029Vb7vLns9sBI9YMjGXt42" target="_blank" class="btn">
+        <div class="btn-title">JOIN ON WHATSAPP</div>
+        <div class="btn-sub">First-Access Whatsapp Channel</div>
+    </a>
+
+    <a href="amorvi.vcf" download class="btn save-btn">
+        <div class="btn-title">Save Contact</div>
+        <div class="btn-sub">For newest Status Updates</div>
+    </a>
+
+    <div class="footer">www.amorvi.in</div>
+
+</div>
+
+<script>
+// Generates & downloads contact card
+document.querySelector('.save-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const vcf =
+`BEGIN:VCARD
+VERSION:3.0
+FN:AMORVI
+ORG:AMORVI
+TEL;TYPE=CELL:+919992206060
+URL:https://www.amorvi.in
+END:VCARD`;
+
+    const blob = new Blob([vcf], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'AMORVI.vcf';
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>

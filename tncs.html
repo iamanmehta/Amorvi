@@ -3,125 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Terms & Conditions</title>
+    <title>Amorvi - Terms and Conditions</title>
+    
+    <!-- Import Montserrat Font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f5f5f5;
+        /* General Reset and Base Styles */
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 40px;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
         }
 
+        /* Responsive Container */
         .container {
             max-width: 800px;
-            margin: auto;
-            background: #fff;
+            margin: 0 auto;
+            background: #ffffff;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
+        /* Brand Name */
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 8px; /* Increased letter spacing */
+            color: #1a1a1a;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            margin-left: 8px; /* Offsets the text alignment issue caused by trailing letter-spacing */
+        }
+
+        /* Typography */
         h1 {
+            font-size: 1.4rem;
+            color: #7f8c8d;
+            font-weight: normal;
+            margin-bottom: 25px;
             text-align: center;
-            color: #222;
-            margin-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+        
+        .important-terms {
+            background-color: #fff3f3;
+            border-left: 4px solid #e74c3c;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 35px;
-            font-size: 15px;
+        .important-terms ul {
+            list-style-type: none;
         }
 
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 8px;
-            margin-top: 30px;
-        }
-
-        ul {
-            padding-left: 22px;
-        }
-
-        li {
+        .important-terms li {
             margin-bottom: 15px;
-            font-size: 16px;
-            line-height: 1.6;
+            font-weight: 600;
+            color: #c0392b;
+            font-size: 1.1rem;
         }
 
-        .important {
-            background: #fff4f4;
-            border-left: 6px solid #d32f2f;
-            padding: 18px;
-            margin-top: 25px;
+        .important-terms li:last-child {
+            margin-bottom: 0;
         }
 
-        .important h3 {
-            margin-top: 0;
-            color: #d32f2f;
+        .important-terms li::before {
+            content: "⚠️ ";
         }
 
-        .footer {
-            margin-top: 50px;
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Social Links Section */
+        .social-section {
+            margin-top: 40px;
             text-align: center;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
+            border-top: 2px solid #eee;
+            padding-top: 25px;
         }
 
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
+        .social-section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+        }
 
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
             .container {
-                box-shadow: none;
-                border-radius: 0;
-                max-width: 100%;
+                padding: 20px;
+            }
+            .brand-name {
+                font-size: 1.8rem;
+                letter-spacing: 5px; /* Increased mobile letter spacing */
+                margin-left: 5px;
+            }
+            h1 {
+                font-size: 1.2rem;
+            }
+            .important-terms li {
+                font-size: 1rem;
+            }
+            .btn-container {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <div class="container">
+        <!-- Brand Name Added Here -->
+        <div class="brand-name">Amorvi</div>
+        
+        <h1>Terms and Conditions of Purchase</h1>
+        
+        <p>Thank you for choosing to shop with us. By making a purchase, you agree to the following terms and conditions. Please read them carefully.</p>
 
-    <h1>Terms & Conditions</h1>
-    <p class="subtitle">Please read the following terms carefully before making your purchase.</p>
+        <!-- Major Points Section -->
+        <div class="important-terms">
+            <ul>
+                <li>Goods once sold will not be returned and no refund will be given in any case.</li>
+                <li>No Exchange without bill within 2 days of purchase.</li>
+            </ul>
+        </div>
 
-    <div class="important">
-        <h3>Important Conditions</h3>
-        <ul>
-            <li><strong>No exchange without the original bill.</strong> Exchange requests will only be accepted within <strong>2 days</strong> from the date of purchase.</li>
+        <p>If you have any questions regarding your purchase or need assistance with sizing, materials, or general inquiries before making your final decision, please do not hesitate to reach out to our team.</p>
 
-            <li><strong>Goods once sold will not be returned.</strong> No refund will be given under any circumstances.</li>
-        </ul>
+        <!-- Social & Contact Links -->
+        <div class="social-section">
+            <h2>Explore More & Contact Us</h2>
+            <div class="btn-container">
+                <!-- Replace 'YOUR_USERNAME' with your actual Instagram handle -->
+                <a href="https://instagram.com/YOUR_USERNAME" target="_blank" class="btn btn-instagram">
+                    Visit our Instagram
+                </a>
+                
+                <!-- Replace 'YOUR_PHONE_NUMBER' with your WhatsApp Business number (include country code, no + sign) -->
+                <!-- Example: https://wa.me/c/919876543210 -->
+                <a href="https://wa.me/c/YOUR_PHONE_NUMBER" target="_blank" class="btn btn-whatsapp">
+                    WhatsApp Catalog
+                </a>
+            </div>
+        </div>
     </div>
-
-    <h2>General Terms</h2>
-
-    <ul>
-        <li>Please inspect the product carefully at the time of purchase.</li>
-
-        <li>Exchange, if applicable, is subject to product condition and management approval.</li>
-
-        <li>Damaged or altered products will not be eligible for exchange.</li>
-
-        <li>The original invoice must be presented for any exchange request.</li>
-
-        <li>The management reserves the right to amend these terms without prior notice.</li>
-    </ul>
-
-    <div class="footer">
-        Thank you for shopping with us.
-    </div>
-
-</div>
 
 </body>
 </html>

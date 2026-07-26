@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Sales Ledger - Compact</title>
+    <style>
+        /* Modern UI Reset & Base Styles - Compact Sizing */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 11px; /* Back to smaller text */
+            background-color: #f3f4f6;
+            color: #1f2937;
+            padding: 20px;
+        }
+
+        .app-window {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 1000px; /* Kept compact */
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header-bar {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-bar h1 {
+            font-size: 14px; /* Reduced from 20px */
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: -0.2px;
+        }
+
+        #clock {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #f9fafb;
+            padding: 16px; /* Tighter padding */
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .name-wrapper {
+            display: flex;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 10px; /* Small labels */
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], input[type="number"], select {
+            font-family: inherit;
+            font-size: 11px; /* Smaller inputs */
+            font-weight: 600;
+            padding: 6px 8px; /* Tighter padding */
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #111827;
+            transition: all 0.2s ease;
+            width: 100%;
+            outline: none;
+            height: 28px;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        select:disabled {
+            background-color: #e5e7eb;
+            cursor: not-allowed;
+            color: #9ca3af;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: inherit;
+            font-size: 11px; /* Smaller button text */
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            padding: 0 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 28px; /* Match input height */
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-primary:active { transform: translateY(1px); }
+
+        .btn-success {
+            background-color: #10b981;
+            color: #ffffff;
+        }
+        .btn-success:hover { background-color: #059669; }
+
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .btn-secondary:hover { background-color: #d1d5db; }
+
+        .btn-danger {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+        .btn-danger:hover { background-color: #fca5a5; color: #b91c1c;}
+
+        .btn-icon {
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+        .btn-icon:hover { background: #d1d5db; color: #111827; }
+
+        .btn-small {
+            height: 22px;
+            padding: 0 10px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 8px 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Table */
+        .table-container {
+            height: 450px;
+            overflow-y: auto;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #f9fafb;
+            padding: 10px 12px; /* Tighter headers */
+            font-size: 10px;
+            font-weight: 800;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 8px 12px; /* Tighter cells */
+            font-size: 11px;
+            font-weight: 600;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+
+        tr.item-row:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Grouping & Totals */
+        .customer-total-row {
+            background-color: #eff6ff;
+            border-bottom: 2px solid #d1d5db;
+        }
+        
+        .customer-total-row td {
+            font-size: 12px;
+            font-weight: 800;
+            color: #1e3a8a;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .ditto {
+            color: #9ca3af;
+            font-weight: 800;
+            font-size: 14px;
+            line-height: 1;
+            display: block;
+            text-align: center;
+            width: 20px;
+        }
+        
+        .customer-name {
+            font-weight: 800;
+            color: #111827;
+            font-size: 11px;
+        }
+
+        .s-no {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-window">
+    <!-- Header -->
+    <div class="header-bar">
+        <h1>Sales Ledger</h1>
+        <div id="clock">Loading time...</div>
+    </div>
+
+    <!-- Entry Form -->
+    <div class="form-section" id="entryForm">
+        <input type="hidden" id="editId">
+        
+        <div class="input-group" style="flex: 1.5;">
+            <label for="customerName">Customer Name</label>
+            <div class="name-wrapper">
+                <input type="text" id="customerName" placeholder="Enter name..." autocomplete="off">
+                <button class="btn btn-icon" onclick="clearCustomer()" title="Clear Customer">✕</button>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="category">Category</label>
+            <select id="category">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="subCategory">Type</label>
+            <select id="subCategory" disabled>
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+
+        <div class="input-group hidden" id="tier3Group">
+            <label for="tier3Category">Sub Category</label>
+            <select id="tier3Category">
+                <option value="">-- Select --</option>
+            </select>
+        </div>
+
+        <div class="input-group" style="flex: 0.8;">
+            <label for="price">Price (₹)</label>
+            <input type="number" id="price" placeholder="0.00" min="0" step="0.01">
+        </div>
+
+        <button class="btn btn-primary" id="saveBtn" onclick="saveSale()">+ Add Sale</button>
+        <button class="btn btn-secondary hidden" id="cancelBtn" onclick="cancelEdit()">Cancel</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button class="btn btn-success" onclick="exportToCSV()">Export to Excel (CSV)</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container">
+        <table id="salesTable">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">S.No</th>
+                    <th style="width: 18%;">Customer</th>
+                    <th style="width: 15%;">Category</th>
+                    <th style="width: 17%;">Type</th>
+                    <th style="width: 15%;">Sub Category</th>
+                    <th style="width: 15%;">Price</th>
+                    <th style="width: 15%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows injected here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // --- Data Structure Setup ---
+    const menuStructure = {
+        "Ring": ["Gold", "AD", "Korean", "Anti-Tarnish", "DC"],
+        "Bracelet": ["Anti-Tarnish", "Chained", "AT Broad"],
+        "Earring": ["Anti-Tarnish", "Korean", "IW", "PW", "Indian", "Funky"],
+        "Pendant": ["Anti-Tarnish", "AD"],
+        "Necklace": ["Anti-Tarnish"],
+        "Chain": ["Anti-Tarnish", "Micro-Gold Plated"],
+        "Set": ["Anti-Tarnish", "AD"]
+    };
+
+    const tier3Structure = {
+        "Set": {
+            "AD": ["Single Layer", "Double Layer", "Triple Layer"]
+        }
+    };
+
+    // --- State Variables ---
+    let sales = JSON.parse(localStorage.getItem('salesLedgerData')) || [];
+
+    // --- Clock Initialization ---
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleString('en-IN', {
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- DOM Elements ---
+    const catSelect = document.getElementById('category');
+    const subCatSelect = document.getElementById('subCategory');
+    const tier3Group = document.getElementById('tier3Group');
+    const tier3Select = document.getElementById('tier3Category');
+
+    // --- Initialize Dropdowns ---
+    function initDropdowns() {
+        Object.keys(menuStructure).forEach(cat => {
+            let opt = document.createElement('option');
+            opt.value = cat;
+            opt.innerText = cat;
+            catSelect.appendChild(opt);
+        });
+    }
+    initDropdowns();
+
+    // --- Dropdown Event Listeners ---
+    catSelect.addEventListener('change', function() {
+        subCatSelect.innerHTML = '<option value="">-- Select --</option>';
+        subCatSelect.disabled = true;
+        tier3Group.classList.add('hidden');
+        tier3Select.innerHTML = '<option value="">-- Select --</option>';
+
+        let selectedCat = this.value;
+        if (selectedCat && menuStructure[selectedCat]) {
+            subCatSelect.disabled = false;
+            menuStructure[selectedCat].forEach(sub => {
+                let opt = document.createElement('option');
+                opt.value = sub;
+                opt.innerText = sub;
+                subCatSelect.appendChild(opt);
+            });
+        }
+    });
+
+    subCatSelect.addEventListener('change', function() {
+        let selectedCat = catSelect.value;
+        let selectedSub = this.value;
+        
+        tier3Group.classList.add('hidden');
+        tier3Select.innerHTML = '<option value="">-- Select --</option>';
+
+        if (tier3Structure[selectedCat] && tier3Structure[selectedCat][selectedSub]) {
+            tier3Group.classList.remove('hidden');
+            tier3Structure[selectedCat][selectedSub].forEach(t3 => {
+                let opt = document.createElement('option');
+                opt.value = t3;
+                opt.innerText = t3;
+                tier3Select.appendChild(opt);
+            });
+        }
+    });
+
+    // --- Main App Logic ---
+    function clearCustomer() {
+        document.getElementById('customerName').value = '';
+        document.getElementById('customerName').focus();
+    }
+
+    function saveSale() {
+        const editId = document.getElementById('editId').value;
+        let customer = document.getElementById('customerName').value.trim();
+        let category = document.getElementById('category').value;
+        let subCategory = document.getElementById('subCategory').value;
+        let tier3 = document.getElementById('tier3Category').value;
+        let price = parseFloat(document.getElementById('price').value);
+
+        if (!customer || !category || !subCategory || isNaN(price)) {
+            alert("Please fill all required fields correctly.");
+            return;
+        }
+
+        if (!tier3Group.classList.contains('hidden') && !tier3) {
+            alert("Please select a Sub Category.");
+            return;
+        }
+
+        const saleEntry = {
+            id: editId ? editId : Date.now().toString(),
+            date: new Date().toLocaleString(),
+            customer: customer,
+            category: category,
+            subCategory: subCategory,
+            tier3: tier3 || "-",      
+            price: price
+        };
+
+        if (editId) {
+            const index = sales.findIndex(s => s.id === editId);
+            if (index !== -1) sales[index] = saleEntry;
+            cancelEdit();
+        } else {
+            sales.push(saleEntry);
+        }
+
+        saveToLocalStorage();
+        renderTable();
+        
+        document.getElementById('category').value = "";
+        catSelect.dispatchEvent(new Event('change'));
+        document.getElementById('price').value = "";
+    }
+
+    function editSale(id) {
+        const sale = sales.find(s => s.id === id);
+        if (!sale) return;
+
+        document.getElementById('editId').value = sale.id;
+        document.getElementById('customerName').value = sale.customer;
+        
+        catSelect.value = sale.category;
+        catSelect.dispatchEvent(new Event('change'));
+        
+        subCatSelect.value = sale.subCategory;
+        subCatSelect.dispatchEvent(new Event('change'));
+        
+        if (sale.tier3 !== "-") {
+            tier3Select.value = sale.tier3;
+        }
+
+        document.getElementById('price').value = sale.price;
+
+        document.getElementById('saveBtn').innerText = "Update";
+        document.getElementById('saveBtn').classList.replace('btn-primary', 'btn-success');
+        document.getElementById('cancelBtn').classList.remove('hidden');
+    }
+
+    function deleteSale(id) {
+        if(confirm("Are you sure you want to delete this item?")) {
+            sales = sales.filter(s => s.id !== id);
+            saveToLocalStorage();
+            renderTable();
+        }
+    }
+
+    function cancelEdit() {
+        document.getElementById('editId').value = "";
+        catSelect.value = "";
+        catSelect.dispatchEvent(new Event('change'));
+        document.getElementById('price').value = "";
+        
+        document.getElementById('saveBtn').innerText = "+ Add Sale";
+        document.getElementById('saveBtn').classList.replace('btn-success', 'btn-primary');
+        document.getElementById('cancelBtn').classList.add('hidden');
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('salesLedgerData', JSON.stringify(sales));
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector("#salesTable tbody");
+        tbody.innerHTML = "";
+
+        if (sales.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='7' style='text-align:center; padding: 30px; color:#9ca3af; font-size: 12px;'>No sales recorded yet.</td></tr>";
+            return;
+        }
+
+        let currentCustomer = null;
+        let groupName = "";
+        let groupItems = [];
+        let customerTotal = 0;
+        let customerSerial = 0;
+
+        function renderGroup() {
+            if (groupItems.length === 0) return;
+
+            groupItems.forEach((item, index) => {
+                let tr = document.createElement('tr');
+                tr.className = "item-row";
+                
+                let displaySerial = (index === 0) 
+                    ? `<span class="s-no">${customerSerial}</span>` 
+                    : ``;
+                
+                let displayCustomer = (index === 0) 
+                    ? `<span class="customer-name">${groupName}</span>` 
+                    : `<span class="ditto">"</span>`;
+
+                tr.innerHTML = `
+                    <td style="text-align: center;">${displaySerial}</td>
+                    <td>${displayCustomer}</td>
+                    <td>${item.category}</td>
+                    <td>${item.subCategory}</td>
+                    <td>${item.tier3}</td>
+                    <td>₹${item.price.toFixed(2)}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-secondary btn-small" onclick="editSale('${item.id}')">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteSale('${item.id}')">Del</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            let totalTr = document.createElement('tr');
+            totalTr.className = "customer-total-row";
+            totalTr.innerHTML = `
+                <td colspan="5" style="text-align: right; text-transform: uppercase;">Total for ${groupName}:</td>
+                <td colspan="2">₹${customerTotal.toFixed(2)}</td>
+            `;
+            tbody.appendChild(totalTr);
+
+            groupItems = [];
+            customerTotal = 0;
+        }
+
+        sales.forEach(item => {
+            let itemCustUpper = item.customer.trim().toUpperCase();
+            
+            if (currentCustomer !== itemCustUpper) {
+                renderGroup(); 
+                currentCustomer = itemCustUpper;
+                groupName = item.customer.trim();
+                customerSerial++; 
+            }
+            
+            groupItems.push(item);
+            customerTotal += item.price;
+        });
+
+        renderGroup(); 
+    }
+
+    function exportToCSV() {
+        if (sales.length === 0) {
+            alert("No data to export.");
+            return;
+        }
+
+        let csvContent = "Date,Customer,Category,Type,Sub Category,Price\n";
+        
+        sales.forEach(row => {
+            let date = `"${row.date}"`;
+            let customer = `"${row.customer.replace(/"/g, '""')}"`;
+            let cat = `"${row.category}"`;
+            let type = `"${row.subCategory}"`; 
+            let subCat = `"${row.tier3}"`;      
+            let price = row.price;
+
+            csvContent += `${date},${customer},${cat},${type},${subCat},${price}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Sales_Export_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    renderTable();
+
+</script>
+</body>
+</html>

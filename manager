@@ -3,636 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Sales Ledger - Compact</title>
+    <title>Sales Tracker</title>
     <style>
-        /* Modern UI Reset & Base Styles - Compact Sizing */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            /* Light Mode */
+            --page-bg: #b3b3b8; /* Grayer background outside the app */
+            --bg-color: #f0f0f2;
+            --card-bg: #ffffff;
+            --text-main: #000000; /* Much darker text */
+            --text-muted: #3a3a3c; /* Much darker muted text */
+            --border-color: #c6c6c8;
+            --accent-blue: #0071e3;
+            --accent-blue-hover: #0077ed;
+            --danger: #ff3b30;
+            --shadow: 0 4px 6px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.15);
+            --radius: 8px;
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+
+        [data-theme="dark"] {
+            /* Dark Mode */
+            --page-bg: #000000;
+            --bg-color: #151516;
+            --card-bg: #1c1c1e;
+            --text-main: #ffffff;
+            --text-muted: #d1d1d6;
+            --border-color: #38383a;
+            --accent-blue: #0a84ff;
+            --accent-blue-hover: #409cff;
+            --danger: #ff453a;
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-stack); }
 
         body {
-            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            font-size: 11px; /* Back to smaller text */
-            background-color: #f3f4f6;
-            color: #1f2937;
-            padding: 20px;
+            background-color: var(--page-bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            padding: 15px;
+            transition: background-color 0.3s;
         }
 
-        .app-window {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            max-width: 1000px; /* Kept compact */
-            margin: 0 auto;
-            overflow: hidden;
+        .app-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 95vh;
+            background-color: var(--bg-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 15px;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s;
         }
 
-        /* Header */
-        .header-bar {
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 12px 16px;
+        /* Custom minimal scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        /* Colored Info Rectangles */
+        .info-box {
+            display: inline-block;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .info-sno { background-color: rgba(142, 142, 147, 0.15); color: var(--text-main); margin-right: 5px; }
+        .info-cat { background-color: rgba(0, 113, 227, 0.12); color: var(--accent-blue); margin-right: 5px; }
+        .info-date { background-color: rgba(142, 142, 147, 0.12); color: var(--text-muted); }
+        .info-amount { background-color: rgba(52, 199, 89, 0.12); color: #208736; font-size: 0.7rem; }
+        [data-theme="dark"] .info-amount { color: #32d74b; background-color: rgba(52, 199, 89, 0.18); }
+
+        /* Top Header Navigation */
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            transition: background-color 0.3s;
         }
 
-        .header-bar h1 {
-            font-size: 14px; /* Reduced from 20px */
-            font-weight: 800;
-            color: #111827;
-            letter-spacing: -0.2px;
-        }
-
-        #clock {
-            font-size: 11px;
-            font-weight: 600;
-            color: #6b7280;
-            background: #f3f4f6;
-            padding: 4px 10px;
-            border-radius: 12px;
-        }
-
-        /* Form Section */
-        .form-section {
-            background: #f9fafb;
-            padding: 16px; /* Tighter padding */
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .name-wrapper {
-            display: flex;
-            gap: 6px;
-        }
-
-        .input-group label {
-            font-size: 10px; /* Small labels */
-            font-weight: 700;
-            color: #374151;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input[type="text"], input[type="number"], select {
-            font-family: inherit;
-            font-size: 11px; /* Smaller inputs */
-            font-weight: 600;
-            padding: 6px 8px; /* Tighter padding */
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            background-color: #ffffff;
-            color: #111827;
-            transition: all 0.2s ease;
-            width: 100%;
-            outline: none;
-            height: 28px;
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
-
-        select:disabled {
-            background-color: #e5e7eb;
-            cursor: not-allowed;
-            color: #9ca3af;
-        }
+        .top-left, .top-right { display: flex; align-items: center; gap: 10px; }
+        .time-display { font-weight: 600; font-size: 0.75rem; color: var(--text-muted); }
+        .today-sale { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
         /* Buttons */
-        .btn {
-            font-family: inherit;
-            font-size: 11px; /* Smaller button text */
-            font-weight: 700;
-            border: none;
-            border-radius: 6px;
-            padding: 0 16px;
+        button {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 28px; /* Match input height */
-        }
-
-        .btn-primary {
-            background-color: #2563eb;
-            color: #ffffff;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-        }
-
-        .btn-primary:hover { background-color: #1d4ed8; }
-        .btn-primary:active { transform: translateY(1px); }
-
-        .btn-success {
-            background-color: #10b981;
-            color: #ffffff;
-        }
-        .btn-success:hover { background-color: #059669; }
-
-        .btn-secondary {
-            background-color: #e5e7eb;
-            color: #374151;
-        }
-        .btn-secondary:hover { background-color: #d1d5db; }
-
-        .btn-danger {
-            background-color: #fee2e2;
-            color: #ef4444;
-        }
-        .btn-danger:hover { background-color: #fca5a5; color: #b91c1c;}
-
-        .btn-icon {
-            padding: 0;
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-        .btn-icon:hover { background: #d1d5db; color: #111827; }
-
-        .btn-small {
-            height: 22px;
-            padding: 0 10px;
-            font-size: 10px;
+            font-size: 0.7rem;
             font-weight: 600;
-            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: var(--page-bg); }
+        button.primary { background-color: var(--accent-blue); color: white; border: none; }
+        button.primary:hover { background-color: var(--accent-blue-hover); }
+        button.danger { background-color: transparent; color: var(--danger); border-color: var(--danger); }
+        button.danger:hover { background-color: rgba(255,59,48,0.1); }
+        .icon-btn { font-size: 0.9rem; padding: 4px 6px; border: none; background: transparent; }
+
+        /* Split Layout Settings */
+        .main-content {
+            display: flex;
+            gap: 15px;
+            flex-grow: 1;
+            min-height: 0;
         }
 
-        /* Toolbar */
-        .toolbar {
-            padding: 8px 16px;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
+        .left-panel {
+            width: 330px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            transition: background-color 0.3s;
+        }
+
+        /* Form Card */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        .card-header {
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
             display: flex;
             justify-content: space-between;
-        }
-
-        /* Table */
-        .table-container {
-            height: 450px;
-            overflow-y: auto;
-            background: #ffffff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            background: #f9fafb;
-            padding: 10px 12px; /* Tighter headers */
-            font-size: 10px;
-            font-weight: 800;
-            color: #4b5563;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #e5e7eb;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        td {
-            padding: 8px 12px; /* Tighter cells */
-            font-size: 11px;
-            font-weight: 600;
-            border-bottom: 1px solid #f3f4f6;
-            vertical-align: middle;
-        }
-
-        tr.item-row:hover {
-            background-color: #f8fafc;
-        }
-
-        /* Grouping & Totals */
-        .customer-total-row {
-            background-color: #eff6ff;
-            border-bottom: 2px solid #d1d5db;
-        }
-        
-        .customer-total-row td {
-            font-size: 12px;
-            font-weight: 800;
-            color: #1e3a8a;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .ditto {
-            color: #9ca3af;
-            font-weight: 800;
-            font-size: 14px;
-            line-height: 1;
-            display: block;
-            text-align: center;
-            width: 20px;
-        }
-        
-        .customer-name {
-            font-weight: 800;
-            color: #111827;
-            font-size: 11px;
-        }
-
-        .s-no {
-            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background: #2563eb;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 9px;
-            font-weight: 800;
         }
 
-        .actions-cell {
-            display: flex;
-            gap: 4px;
+        /* Form Elements */
+        .form-group { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 4px; color: var(--text-muted); font-weight: 600; font-size: 0.7rem; }
+        input, select {
+            width: 100%; padding: 8px 10px; border: 1px solid var(--border-color);
+            border-radius: 5px; background-color: var(--bg-color); color: var(--text-main);
+            font-size: 0.75rem; font-weight: 500; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
         }
+        input:focus, select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2); }
+        input::placeholder { color: #8e8e93; font-weight: 400; }
 
-        .hidden {
-            display: none !important;
+        /* Dynamic Item Rows Layout for Side Panel */
+        .item-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--border-color);
         }
+        
+        .form-actions { display: flex; justify-content: space-between; margin-top: 15px; }
+
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.75rem; font-weight: 500; }
+        th { color: var(--text-muted); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; background-color: var(--bg-color); position: sticky; top: 0; z-index: 1;}
+        .item-list { list-style: none; }
+        .item-list li { margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .desc-text { color: var(--text-muted); font-size: 0.7rem; font-weight: 500; }
     </style>
 </head>
 <body>
 
-<div class="app-window">
-    <!-- Header -->
-    <div class="header-bar">
-        <h1>Sales Ledger</h1>
-        <div id="clock">Loading time...</div>
+<div class="app-container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-left">
+            <div class="today-sale">
+                Today: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
+                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()">Hide</button>
+            </div>
+        </div>
+        <div class="top-right">
+            <span class="time-display" id="datetimeDisplay"></span>
+            <button type="button" class="icon-btn" onclick="toggleDarkMode()" id="themeIcon">🌙</button>
+        </div>
     </div>
 
-    <!-- Entry Form -->
-    <div class="form-section" id="entryForm">
-        <input type="hidden" id="editId">
+    <!-- Main Content Area -->
+    <div class="main-content">
         
-        <div class="input-group" style="flex: 1.5;">
-            <label for="customerName">Customer Name</label>
-            <div class="name-wrapper">
-                <input type="text" id="customerName" placeholder="Enter name..." autocomplete="off">
-                <button class="btn btn-icon" onclick="clearCustomer()" title="Clear Customer">✕</button>
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+            <div class="card">
+                <div class="card-header">
+                    <span id="formTitle">New Sale Entry</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
+                </div>
+
+                <div id="itemsContainer">
+                    <!-- Item rows injected here -->
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="addItemRow()">+ Add Item</button>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" id="cancelEditBtn" onclick="clearForm()" style="display: none;">Cancel</button>
+                        <button type="button" class="primary" id="saveBtn" onclick="saveSale()">Add Sale</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="input-group">
-            <label for="category">Category</label>
-            <select id="category">
-                <option value="">-- Select --</option>
-            </select>
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <div class="card-header" style="padding: 12px; margin-bottom: 0; border: none; background: var(--card-bg); position: sticky; top: 0; z-index: 2;">
+                <span>Sales Records</span>
+                <button type="button" onclick="exportToExcel()">Export (Excel)</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date & Time</th>
+                        <th>Customer</th>
+                        <th>Items Purchased</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
         </div>
 
-        <div class="input-group">
-            <label for="subCategory">Type</label>
-            <select id="subCategory" disabled>
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-
-        <div class="input-group hidden" id="tier3Group">
-            <label for="tier3Category">Sub Category</label>
-            <select id="tier3Category">
-                <option value="">-- Select --</option>
-            </select>
-        </div>
-
-        <div class="input-group" style="flex: 0.8;">
-            <label for="price">Price (₹)</label>
-            <input type="number" id="price" placeholder="0.00" min="0" step="0.01">
-        </div>
-
-        <button class="btn btn-primary" id="saveBtn" onclick="saveSale()">+ Add Sale</button>
-        <button class="btn btn-secondary hidden" id="cancelBtn" onclick="cancelEdit()">Cancel</button>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="toolbar">
-        <button class="btn btn-success" onclick="exportToCSV()">Export to Excel (CSV)</button>
-    </div>
-
-    <!-- Data Table -->
-    <div class="table-container">
-        <table id="salesTable">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">S.No</th>
-                    <th style="width: 18%;">Customer</th>
-                    <th style="width: 15%;">Category</th>
-                    <th style="width: 17%;">Type</th>
-                    <th style="width: 15%;">Sub Category</th>
-                    <th style="width: 15%;">Price</th>
-                    <th style="width: 15%;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows injected here -->
-            </tbody>
-        </table>
     </div>
 </div>
 
 <script>
-    // --- Data Structure Setup ---
-    const menuStructure = {
-        "Ring": ["Gold", "AD", "Korean", "Anti-Tarnish", "DC"],
-        "Bracelet": ["Anti-Tarnish", "Chained", "AT Broad"],
-        "Earring": ["Anti-Tarnish", "Korean", "IW", "PW", "Indian", "Funky"],
-        "Pendant": ["Anti-Tarnish", "AD"],
-        "Necklace": ["Anti-Tarnish"],
-        "Chain": ["Anti-Tarnish", "Micro-Gold Plated"],
-        "Set": ["Anti-Tarnish", "AD"]
+    // State Management & Categories
+    let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
+    let editingId = null;
+    let saleVisible = true;
+
+    // Defined Categories
+    const subCategories = {
+        "RING": ["anti tarnish", "korean", "ad-cocktail", "ad-medium", "ad-small", "gold-white stone", "gold-red stone", "gold-cocktail", "gold plain"],
+        "Pendant": ["anti-tarnish", "ad"],
+        "Bracelet": ["anti-tarnish", "ad", "anti-tarnish chained", "ad chained"],
+        "Earring": ["Korean", "Anti-tarnish", "hoops", "ad earrings", "ad studs", "iw", "pw", "funky"],
+        "Chain": [], // Empty array = blank text box
+        "Set": ["anti-tarnish", "ad simple", "ad 2 layer", "ad 3 layer", "ad heavy", "ad choker"],
+        "Necklace": ["anti-tarnish", "ad"]
     };
+    
+    const categoriesList = Object.keys(subCategories);
 
-    const tier3Structure = {
-        "Set": {
-            "AD": ["Single Layer", "Double Layer", "Triple Layer"]
-        }
-    };
-
-    // --- State Variables ---
-    let sales = JSON.parse(localStorage.getItem('salesLedgerData')) || [];
-
-    // --- Clock Initialization ---
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleString('en-IN', {
-            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // --- DOM Elements ---
-    const catSelect = document.getElementById('category');
-    const subCatSelect = document.getElementById('subCategory');
-    const tier3Group = document.getElementById('tier3Group');
-    const tier3Select = document.getElementById('tier3Category');
-
-    // --- Initialize Dropdowns ---
-    function initDropdowns() {
-        Object.keys(menuStructure).forEach(cat => {
-            let opt = document.createElement('option');
-            opt.value = cat;
-            opt.innerText = cat;
-            catSelect.appendChild(opt);
-        });
-    }
-    initDropdowns();
-
-    // --- Dropdown Event Listeners ---
-    catSelect.addEventListener('change', function() {
-        subCatSelect.innerHTML = '<option value="">-- Select --</option>';
-        subCatSelect.disabled = true;
-        tier3Group.classList.add('hidden');
-        tier3Select.innerHTML = '<option value="">-- Select --</option>';
-
-        let selectedCat = this.value;
-        if (selectedCat && menuStructure[selectedCat]) {
-            subCatSelect.disabled = false;
-            menuStructure[selectedCat].forEach(sub => {
-                let opt = document.createElement('option');
-                opt.value = sub;
-                opt.innerText = sub;
-                subCatSelect.appendChild(opt);
-            });
-        }
-    });
-
-    subCatSelect.addEventListener('change', function() {
-        let selectedCat = catSelect.value;
-        let selectedSub = this.value;
+    window.onload = () => {
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
         
-        tier3Group.classList.add('hidden');
-        tier3Select.innerHTML = '<option value="">-- Select --</option>';
-
-        if (tier3Structure[selectedCat] && tier3Structure[selectedCat][selectedSub]) {
-            tier3Group.classList.remove('hidden');
-            tier3Structure[selectedCat][selectedSub].forEach(t3 => {
-                let opt = document.createElement('option');
-                opt.value = t3;
-                opt.innerText = t3;
-                tier3Select.appendChild(opt);
-            });
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
         }
-    });
 
-    // --- Main App Logic ---
-    function clearCustomer() {
+        addItemRow(); 
+        renderTable();
+        calculateTodaySale();
+        document.getElementById('customerName').focus();
+    };
+
+    function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        document.getElementById('datetimeDisplay').textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    function toggleDarkMode() {
+        const body = document.body;
+        const icon = document.getElementById('themeIcon');
+        
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            icon.textContent = '🌙';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            icon.textContent = '☀️';
+        }
+    }
+
+    function toggleTodaySale() {
+        const valSpan = document.getElementById('todayTotalValue');
+        const btn = document.getElementById('toggleSaleBtn');
+        saleVisible = !saleVisible;
+        
+        if (saleVisible) {
+            calculateTodaySale(); 
+            btn.textContent = "Hide";
+        } else {
+            valSpan.textContent = "****";
+            btn.textContent = "Show";
+        }
+    }
+
+    // Renders the Type Dropdown/Text input dynamically
+    function updateSubcatUI(selectElement, selectedSub = '') {
+        const category = selectElement.value;
+        const descContainer = selectElement.closest('.item-row').querySelector('.desc-wrapper');
+        const options = subCategories[category];
+        
+        if (options && options.length > 0) {
+            let selectHTML = `<select class="item-subcat">`;
+            options.forEach(opt => {
+                selectHTML += `<option value="${opt}" ${selectedSub === opt ? 'selected' : ''}>${opt}</option>`;
+            });
+            selectHTML += `</select>`;
+            descContainer.innerHTML = selectHTML;
+        } else {
+            descContainer.innerHTML = `<input type="text" class="item-subcat" placeholder="Enter type..." value="${selectedSub}">`;
+        }
+    }
+
+    // Handles adding the UI row with the updated Grid Layout
+    function addItemRow(cat = '', subCat = '', note = '', price = '') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; price = ''; } 
+
+        const container = document.getElementById('itemsContainer');
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'item-row';
+
+        const defaultCat = cat || categoriesList[0];
+
+        let selectHTML = `<select class="item-category" onchange="updateSubcatUI(this)">`;
+        categoriesList.forEach(c => {
+            selectHTML += `<option value="${c}" ${defaultCat === c ? 'selected' : ''}>${c}</option>`;
+        });
+        selectHTML += `</select>`;
+
+        rowDiv.innerHTML = `
+            <div class="form-group"><label>Item</label>${selectHTML}</div>
+            
+            <div class="form-group">
+                <label>Type</label>
+                <div class="desc-wrapper"></div>
+            </div>
+            
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Note (Optional description)</label>
+                <input type="text" class="item-note" placeholder="Any extra details..." value="${note}">
+            </div>
+            
+            <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" class="item-price" placeholder="0" step="10" value="${price}">
+            </div>
+            
+            <div class="form-group" style="display: flex; align-items: flex-end; justify-content: flex-end;">
+                <button type="button" class="danger" onclick="this.parentElement.parentElement.remove()">Remove</button>
+            </div>
+        `;
+        
+        container.appendChild(rowDiv);
+        
+        // Trigger UI update immediately to load specific sub-types
+        updateSubcatUI(rowDiv.querySelector('.item-category'), subCat);
+    }
+
+    function clearForm() {
         document.getElementById('customerName').value = '';
+        document.getElementById('itemsContainer').innerHTML = '';
+        addItemRow();
+        editingId = null;
+        
+        document.getElementById('formTitle').textContent = "New Sale Entry";
+        document.getElementById('saveBtn').textContent = "Add Sale";
+        document.getElementById('cancelEditBtn').style.display = "none";
+        
         document.getElementById('customerName').focus();
     }
 
+    function getNextSerial() {
+        if (salesData.length === 0) return 1;
+        const maxSerial = Math.max(...salesData.map(s => s.serialNo || 0));
+        return maxSerial + 1;
+    }
+
     function saveSale() {
-        const editId = document.getElementById('editId').value;
-        let customer = document.getElementById('customerName').value.trim();
-        let category = document.getElementById('category').value;
-        let subCategory = document.getElementById('subCategory').value;
-        let tier3 = document.getElementById('tier3Category').value;
-        let price = parseFloat(document.getElementById('price').value);
+        const nameInput = document.getElementById('customerName').value.trim();
+        
+        let currentSerialNo;
+        if (editingId) {
+            const existing = salesData.find(s => s.id === editingId);
+            currentSerialNo = existing.serialNo || getNextSerial();
+        } else {
+            currentSerialNo = getNextSerial(); 
+        }
 
-        if (!customer || !category || !subCategory || isNaN(price)) {
-            alert("Please fill all required fields correctly.");
+        let customerName = nameInput;
+        if (customerName === "") {
+            customerName = `Customer #${currentSerialNo}`;
+        }
+
+        const rows = document.querySelectorAll('.item-row');
+        let items = [];
+        let total = 0;
+
+        rows.forEach(row => {
+            const category = row.querySelector('.item-category').value;
+            const subCategoryNode = row.querySelector('.item-subcat');
+            const subCategory = subCategoryNode ? subCategoryNode.value.trim() : '';
+            const note = row.querySelector('.item-note').value.trim();
+            const priceVal = parseFloat(row.querySelector('.item-price').value);
+            
+            if (!isNaN(priceVal) && priceVal > 0) {
+                items.push({ category, subCategory, note, price: priceVal });
+                total += priceVal;
+            }
+        });
+
+        if (items.length === 0) {
+            alert("Please add at least one item with a valid price.");
             return;
         }
 
-        if (!tier3Group.classList.contains('hidden') && !tier3) {
-            alert("Please select a Sub Category.");
-            return;
-        }
-
-        const saleEntry = {
-            id: editId ? editId : Date.now().toString(),
-            date: new Date().toLocaleString(),
-            customer: customer,
-            category: category,
-            subCategory: subCategory,
-            tier3: tier3 || "-",      
-            price: price
+        const saleRecord = {
+            id: editingId ? editingId : Date.now(),
+            serialNo: currentSerialNo,
+            timestamp: editingId ? salesData.find(s => s.id === editingId).timestamp : new Date().toISOString(),
+            customerName,
+            items,
+            total
         };
 
-        if (editId) {
-            const index = sales.findIndex(s => s.id === editId);
-            if (index !== -1) sales[index] = saleEntry;
-            cancelEdit();
+        if (editingId) {
+            const index = salesData.findIndex(s => s.id === editingId);
+            if (index !== -1) salesData[index] = saleRecord;
         } else {
-            sales.push(saleEntry);
+            salesData.unshift(saleRecord);
         }
 
-        saveToLocalStorage();
+        localStorage.setItem('salesData', JSON.stringify(salesData));
+        clearForm();
         renderTable();
-        
-        document.getElementById('category').value = "";
-        catSelect.dispatchEvent(new Event('change'));
-        document.getElementById('price').value = "";
+        calculateTodaySale();
     }
 
     function editSale(id) {
-        const sale = sales.find(s => s.id === id);
+        const sale = salesData.find(s => s.id === id);
         if (!sale) return;
 
-        document.getElementById('editId').value = sale.id;
-        document.getElementById('customerName').value = sale.customer;
+        document.getElementById('customerName').value = sale.customerName;
+        document.getElementById('itemsContainer').innerHTML = '';
         
-        catSelect.value = sale.category;
-        catSelect.dispatchEvent(new Event('change'));
-        
-        subCatSelect.value = sale.subCategory;
-        subCatSelect.dispatchEvent(new Event('change'));
-        
-        if (sale.tier3 !== "-") {
-            tier3Select.value = sale.tier3;
-        }
+        sale.items.forEach(item => {
+            // Handles backward compatibility if subCategory is missing from old saves
+            const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
+            const noteData = item.note || '';
+            addItemRow(item.category, subCatData, noteData, item.price);
+        });
 
-        document.getElementById('price').value = sale.price;
-
-        document.getElementById('saveBtn').innerText = "Update";
-        document.getElementById('saveBtn').classList.replace('btn-primary', 'btn-success');
-        document.getElementById('cancelBtn').classList.remove('hidden');
+        editingId = id;
+        document.getElementById('formTitle').textContent = `Edit Sale Entry #${sale.serialNo || 'Old'}`;
+        document.getElementById('saveBtn').textContent = "Update Sale";
+        document.getElementById('cancelEditBtn').style.display = "inline-block";
+        
+        document.querySelector('.left-panel').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function deleteSale(id) {
-        if(confirm("Are you sure you want to delete this item?")) {
-            sales = sales.filter(s => s.id !== id);
-            saveToLocalStorage();
+        if(confirm("Are you sure you want to delete this entry?")) {
+            salesData = salesData.filter(s => s.id !== id);
+            localStorage.setItem('salesData', JSON.stringify(salesData));
+            
+            if(editingId === id) clearForm();
+            
             renderTable();
+            calculateTodaySale();
         }
-    }
-
-    function cancelEdit() {
-        document.getElementById('editId').value = "";
-        catSelect.value = "";
-        catSelect.dispatchEvent(new Event('change'));
-        document.getElementById('price').value = "";
-        
-        document.getElementById('saveBtn').innerText = "+ Add Sale";
-        document.getElementById('saveBtn').classList.replace('btn-success', 'btn-primary');
-        document.getElementById('cancelBtn').classList.add('hidden');
-    }
-
-    function saveToLocalStorage() {
-        localStorage.setItem('salesLedgerData', JSON.stringify(sales));
     }
 
     function renderTable() {
-        const tbody = document.querySelector("#salesTable tbody");
-        tbody.innerHTML = "";
+        const tbody = document.getElementById('salesTableBody');
+        tbody.innerHTML = '';
 
-        if (sales.length === 0) {
-            tbody.innerHTML = "<tr><td colspan='7' style='text-align:center; padding: 30px; color:#9ca3af; font-size: 12px;'>No sales recorded yet.</td></tr>";
-            return;
-        }
+        salesData.forEach(sale => {
+            const dateObj = new Date(sale.timestamp);
+            const dateStr = dateObj.toLocaleDateString([], {month:'short', day:'numeric'}) + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const serialDisplay = sale.serialNo ? sale.serialNo : '-';
 
-        let currentCustomer = null;
-        let groupName = "";
-        let groupItems = [];
-        let customerTotal = 0;
-        let customerSerial = 0;
-
-        function renderGroup() {
-            if (groupItems.length === 0) return;
-
-            groupItems.forEach((item, index) => {
-                let tr = document.createElement('tr');
-                tr.className = "item-row";
+            let itemsHTML = '<ul class="item-list">';
+            sale.items.forEach(item => {
+                // Formatting Subcategory + Note
+                const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
+                const noteData = item.note || '';
                 
-                let displaySerial = (index === 0) 
-                    ? `<span class="s-no">${customerSerial}</span>` 
-                    : ``;
-                
-                let displayCustomer = (index === 0) 
-                    ? `<span class="customer-name">${groupName}</span>` 
-                    : `<span class="ditto">"</span>`;
+                // Construct the "Pendant > anti-tarnish" tag
+                const catString = subCatData ? `${item.category} > ${subCatData}` : item.category;
+                const noteStr = noteData ? `<span class="desc-text">(${noteData})</span>` : '';
 
-                tr.innerHTML = `
-                    <td style="text-align: center;">${displaySerial}</td>
-                    <td>${displayCustomer}</td>
-                    <td>${item.category}</td>
-                    <td>${item.subCategory}</td>
-                    <td>${item.tier3}</td>
-                    <td>₹${item.price.toFixed(2)}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-secondary btn-small" onclick="editSale('${item.id}')">Edit</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteSale('${item.id}')">Del</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+                itemsHTML += `<li>
+                    <span class="info-box info-cat">${catString}</span>
+                    ${noteStr}
+                    <span class="info-box info-amount">₹${item.price.toFixed(2)}</span>
+                </li>`;
             });
+            itemsHTML += '</ul>';
 
-            let totalTr = document.createElement('tr');
-            totalTr.className = "customer-total-row";
-            totalTr.innerHTML = `
-                <td colspan="5" style="text-align: right; text-transform: uppercase;">Total for ${groupName}:</td>
-                <td colspan="2">₹${customerTotal.toFixed(2)}</td>
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="info-box info-sno">#${serialDisplay}</span></td>
+                <td><span class="info-box info-date">${dateStr}</span></td>
+                <td style="font-weight: 700; font-size: 0.8rem;">${sale.customerName}</td>
+                <td>${itemsHTML}</td>
+                <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${sale.total.toFixed(2)}</span></td>
+                <td>
+                    <button type="button" onclick="editSale(${sale.id})" style="margin-bottom: 4px;">Edit</button><br>
+                    <button type="button" class="danger" onclick="deleteSale(${sale.id})">Del</button>
+                </td>
             `;
-            tbody.appendChild(totalTr);
-
-            groupItems = [];
-            customerTotal = 0;
-        }
-
-        sales.forEach(item => {
-            let itemCustUpper = item.customer.trim().toUpperCase();
-            
-            if (currentCustomer !== itemCustUpper) {
-                renderGroup(); 
-                currentCustomer = itemCustUpper;
-                groupName = item.customer.trim();
-                customerSerial++; 
-            }
-            
-            groupItems.push(item);
-            customerTotal += item.price;
+            tbody.appendChild(tr);
         });
-
-        renderGroup(); 
     }
 
-    function exportToCSV() {
-        if (sales.length === 0) {
-            alert("No data to export.");
+    function calculateTodaySale() {
+        if (!saleVisible) return;
+        
+        const today = new Date().toLocaleDateString();
+        let total = 0;
+        
+        salesData.forEach(sale => {
+            const saleDate = new Date(sale.timestamp).toLocaleDateString();
+            if (saleDate === today) {
+                total += sale.total;
+            }
+        });
+
+        document.getElementById('todayTotalValue').textContent = `₹${total.toFixed(2)}`;
+    }
+
+    function exportToExcel() {
+        if(salesData.length === 0) {
+            alert("No data to export!");
             return;
         }
 
-        let csvContent = "Date,Customer,Category,Type,Sub Category,Price\n";
-        
-        sales.forEach(row => {
-            let date = `"${row.date}"`;
-            let customer = `"${row.customer.replace(/"/g, '""')}"`;
-            let cat = `"${row.category}"`;
-            let type = `"${row.subCategory}"`; 
-            let subCat = `"${row.tier3}"`;      
-            let price = row.price;
+        let csvContent = "S.No.,Date,Time,Customer Name,Item Category,Item Type,Extra Note,Item Price,Sale Total\n";
 
-            csvContent += `${date},${customer},${cat},${type},${subCat},${price}\n`;
+        salesData.forEach(sale => {
+            const dateObj = new Date(sale.timestamp);
+            const date = dateObj.toLocaleDateString();
+            const time = dateObj.toLocaleTimeString();
+            const customer = `"${sale.customerName.replace(/"/g, '""')}"`;
+            const total = sale.total.toFixed(2);
+            const sno = sale.serialNo || '';
+
+            sale.items.forEach((item, index) => {
+                const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
+                const noteData = item.note || '';
+
+                const cat = item.category;
+                const type = `"${subCatData.replace(/"/g, '""')}"`;
+                const note = `"${noteData.replace(/"/g, '""')}"`;
+                const price = item.price.toFixed(2);
+                
+                const displayTotal = (index === sale.items.length - 1) ? total : "";
+                csvContent += `${sno},${date},${time},${customer},${cat},${type},${note},${price},${displayTotal}\n`;
+            });
         });
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
         link.setAttribute("href", url);
         link.setAttribute("download", `Sales_Export_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
         link.style.visibility = 'hidden';
@@ -640,9 +619,6 @@
         link.click();
         document.body.removeChild(link);
     }
-
-    renderTable();
-
 </script>
 </body>
 </html>

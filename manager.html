@@ -261,7 +261,19 @@
                     <label>Customer Name</label>
                     <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
                 </div>
+                
+                <!-- Item Details moved up -->
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Item Details</div>
 
+                <div id="itemsContainer">
+                    <!-- Item rows injected here -->
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <button type="button" onclick="addItemRow()">+ Add Item</button>
+                </div>
+
+                <!-- Experience Details moved down -->
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Experience Details</div>
 
                 <div class="form-grid-2">
@@ -287,18 +299,11 @@
                         <option value="Branded Carry bag">Branded Carry bag</option>
                     </select>
                 </div>
-                
-                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Item Details</div>
-
-                <div id="itemsContainer">
-                    <!-- Item rows injected here -->
-                </div>
 
                 <div class="form-actions" style="margin-top: 10px;">
-                    <button type="button" onclick="addItemRow()">+ Add Item</button>
-                    <div style="display: flex; gap: 6px;">
+                    <div style="display: flex; gap: 6px; width: 100%; justify-content: flex-end;">
                         <button type="button" id="cancelEditBtn" onclick="clearForm()" style="display: none;">Cancel</button>
-                        <button type="button" class="primary" id="saveBtn" onclick="saveSale()">Add Sale</button>
+                        <button type="button" class="primary" id="saveBtn" onclick="saveSale()" style="flex: 1;">Add Sale</button>
                     </div>
                 </div>
                 <div style="margin-top: 10px; text-align: right;">
@@ -388,7 +393,6 @@
 
     function getTodayBillPrefix() {
         const d = new Date();
-        // Day + Month (1-indexed) + Hyphen
         return `${d.getDate()}${d.getMonth() + 1}-`;
     }
 
@@ -467,8 +471,8 @@
         }
     }
 
-    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'NA', note = '', packaging = 'Packet') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'NA'; note = ''; packaging = 'Packet'; } 
+    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'Self', note = '', packaging = 'Packet') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'Self'; note = ''; packaging = 'Packet'; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');
@@ -667,7 +671,7 @@
                 item.subCategory || '', 
                 item.price, 
                 item.buyPrice || '', 
-                item.vendor || 'NA', 
+                item.vendor || 'Self', 
                 item.note || '', 
                 item.packaging || 'Packet'
             );
@@ -722,7 +726,7 @@
             sale.items.forEach(item => {
                 const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
                 const noteStr = item.note ? `<span class="desc-text" style="margin-left: 4px;">(${item.note})</span>` : '';
-                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'NA'}</span>`;
+                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
                 const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
                 const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
                 const itemProfit = item.price - (item.buyPrice || 0);
@@ -750,7 +754,6 @@
                 <td><span class="info-box info-sno">#${serialDisplay}</span></td>
                 <td><span class="info-date" style="padding: 2px 4px; border-radius:3px;">${dateStr}</span></td>
                 <td>
-                    <!-- Refined layout for Customer Name and small Edit icon -->
                     <div style="display:flex; align-items:center; gap: 6px;">
                         <strong style="font-size: 0.85rem;">${sale.customerName}</strong>
                         <button type="button" class="icon-btn" title="Edit Sale" onclick="editSale(${sale.id})" style="font-size: 0.65rem; padding: 2px; color: var(--accent-blue);">✏️</button>
@@ -830,7 +833,7 @@
             sale.items.forEach((item, index) => {
                 const subCatData = item.subCategory || '';
                 const noteData = item.note || '';
-                const itemVendor = `"${(item.vendor || 'NA').replace(/"/g, '""')}"`;
+                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
                 const packaging = `"${(item.packaging || 'Packet').replace(/"/g, '""')}"`;
 
                 const cat = item.category;

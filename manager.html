@@ -576,10 +576,8 @@
     }
 
     function getNextSerial() {
-        if (salesData.length === 0) return 1;
-        const maxSerial = Math.max(...salesData.map(s => s.serialNo || 0));
-        return maxSerial + 1;
-    }
+    return salesData.length + 1;
+}
 
     function saveSale() {
         const nameInput = document.getElementById('customerName').value.trim();
@@ -687,16 +685,28 @@
     }
 
     function deleteCurrentSale() {
-        if (!editingId) return;
-        if(confirm("Are you sure you want to delete this entry?")) {
-            salesData = salesData.filter(s => s.id !== editingId);
-            localStorage.setItem('salesData', JSON.stringify(salesData));
-            clearForm();
-            renderTable();
-            calculateTodaySale();
-        }
-    }
+    if (!editingId) return;
+    if(confirm("Are you sure you want to delete this entry?")) {
+        salesData = salesData.filter(s => s.id !== editingId);
+        
+        // Re-index serial numbers sequentially
+        salesData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        salesData.forEach((sale, index) => {
+            const oldSerial = sale.serialNo;
+            const newSerial = index + 1;
+            sale.serialNo = newSerial;
+            if (sale.customerName === `Customer #${oldSerial}`) {
+                sale.customerName = `Customer #${newSerial}`;
+            }
+        });
+        salesData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
+        localStorage.setItem('salesData', JSON.stringify(salesData));
+        clearForm();
+        renderTable();
+        calculateTodaySale();
+    }
+}
     function clearAllData() {
         if(confirm("🚨 WARNING: Are you sure you want to delete ALL sales data? This cannot be undone!")) {
             if(confirm("Are you absolutely sure? All records will be permanently lost.")) {

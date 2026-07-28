@@ -352,13 +352,13 @@
     let godlineText = localStorage.getItem('godline') || "Trust the Process ✨";
 
     const subCategories = {
-        "RING": ["anti tarnish", "korean", "ad-cocktail", "ad-medium", "ad-small", "gold-white stone", "gold-red stone", "gold-cocktail", "gold plain"],
-        "Pendant": ["anti-tarnish", "ad"],
-        "Bracelet": ["anti-tarnish", "ad", "anti-tarnish chained", "ad chained"],
-        "Earring": ["Korean", "Anti-tarnish", "hoops", "ad earrings", "ad studs", "iw", "pw", "funky"],
-        "Chain": [],
-        "Set": ["anti-tarnish", "ad simple", "ad 2 layer", "ad 3 layer", "ad heavy", "ad choker"],
-        "Necklace": ["anti-tarnish", "ad"]
+        "RING": ["Anti Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold -White Stone", "Gold -Red Stone", "Gold -Cocktail", "Gold -Plain"],
+        "Pendant": ["Anti-Tarnish", "AD"],
+        "Bracelet": ["Anti-Tarnish", "AD", "Anti-Tarnish Chained", "AD Chained"],
+        "Earring": ["Korean", "Anti-tarnish", "Hoops", "AD Earrings", "Anti-Tarnish Studs", "General Studs", "AD studs","Gold Studs", "Indo-Western", "Partywear", "Funky"],
+        "Chain": ["AT Sleek Snake", "AT Snake", "AT Balls", "Silver", "Micro-Gold 18 Inch 1L" ,"Micro-Gold 18 Inch 2L" ,"Micro-Gold 24 Inch 2L", "Micro-Gold 24 Inch 3L" ,"Men's"],
+        "Set": ["Anti-Tarnish", "AD One", "AD 2 Layer", "AD 3 layer", "AD Heavy", "AD choker" ,"Indian Kundan/Polki Stone cut (Small)" ,"Indian Kundan/Polki Stone cut (Big)"],
+        "Necklace": ["Anti-Tarnish", "AD"]
     };
     
     const categoriesList = Object.keys(subCategories);
@@ -467,8 +467,8 @@
         }
     }
 
-    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'Self', note = '', packaging = 'Packet') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'Self'; note = ''; packaging = 'Packet'; } 
+    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'NA', note = '', packaging = 'Packet') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'NA'; note = ''; packaging = 'Packet'; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');
@@ -503,10 +503,19 @@
                 <div class="form-group">
                     <label>Vendor</label>
                     <select class="item-vendor">
-                        <option value="Self">Self</option>
-                        <option value="Vendor A">Vendor A</option>
-                        <option value="Vendor B">Vendor B</option>
-                        <option value="Vendor C">Vendor C</option>
+                        <option value="NA" ${vendor === 'NA' ? 'selected' : ''}>NA</option>
+                        <option value="Bhagvat Imitation">Bhagvat Imitation</option>
+                        <option value="Inayat Fashions">Inayat Fashions</option>
+                        <option value="Singh Fashion Emproium">Singh Fashion Emproium</option>
+                        <option value="VM Jewellers">VM Jewellers</option>
+                        <option value="VK Fashion Mart">VK Fashion Mart</option>
+                        <option value="A-One AD">A-One AD</option>
+                        <option value="Maa Vaishno Jewellers">Maa Vaishno Jewellers</option>
+                        <option value="Shree Shyam Jewellers">Shree Shyam Jewellers</option>
+                        <option value="Minari Mumbai">Minari Mumbai</option>
+                        <option value="Aggarwal Novelties">Aggarwak Novelties</option>
+                        <option value="Neenox/Lezara NX">Neenox/Lezara NX</option>
+
                     </select>
                 </div>
                 <div class="form-group">
@@ -658,7 +667,7 @@
                 item.subCategory || '', 
                 item.price, 
                 item.buyPrice || '', 
-                item.vendor || 'Self', 
+                item.vendor || 'NA', 
                 item.note || '', 
                 item.packaging || 'Packet'
             );
@@ -713,7 +722,7 @@
             sale.items.forEach(item => {
                 const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
                 const noteStr = item.note ? `<span class="desc-text" style="margin-left: 4px;">(${item.note})</span>` : '';
-                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
+                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'NA'}</span>`;
                 const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
                 const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
                 const itemProfit = item.price - (item.buyPrice || 0);
@@ -821,7 +830,7 @@
             sale.items.forEach((item, index) => {
                 const subCatData = item.subCategory || '';
                 const noteData = item.note || '';
-                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
+                const itemVendor = `"${(item.vendor || 'NA').replace(/"/g, '""')}"`;
                 const packaging = `"${(item.packaging || 'Packet').replace(/"/g, '""')}"`;
 
                 const cat = item.category;

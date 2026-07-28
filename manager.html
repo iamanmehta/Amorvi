@@ -7,11 +7,11 @@
     <style>
         :root {
             /* Light Mode */
-            --page-bg: #b3b3b8; /* Grayer background outside the app */
+            --page-bg: #b3b3b8;
             --bg-color: #f0f0f2;
             --card-bg: #ffffff;
-            --text-main: #000000; /* Much darker text */
-            --text-muted: #3a3a3c; /* Much darker muted text */
+            --text-main: #000000;
+            --text-muted: #3a3a3c;
             --border-color: #c6c6c8;
             --accent-blue: #0071e3;
             --accent-blue-hover: #0077ed;
@@ -51,7 +51,7 @@
 
         .app-container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1450px;
             height: 95vh;
             background-color: var(--bg-color);
             border-radius: 16px;
@@ -62,15 +62,13 @@
             transition: background-color 0.3s;
         }
 
-        /* Custom minimal scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
-        /* Colored Info Rectangles */
         .info-box {
             display: inline-block;
-            padding: 4px 6px;
+            padding: 3px 6px;
             border-radius: 4px;
             font-size: 0.65rem;
             font-weight: 600;
@@ -79,7 +77,7 @@
         }
         
         .info-sno { background-color: rgba(142, 142, 147, 0.15); color: var(--text-main); margin-right: 5px; }
-        .info-cat { background-color: rgba(0, 113, 227, 0.12); color: var(--accent-blue); margin-right: 5px; }
+        .info-cat { background-color: rgba(0, 113, 227, 0.12); color: var(--accent-blue); }
         .info-date { background-color: rgba(142, 142, 147, 0.12); color: var(--text-muted); }
         .info-amount { background-color: rgba(52, 199, 89, 0.12); color: #208736; font-size: 0.7rem; }
         [data-theme="dark"] .info-amount { color: #32d74b; background-color: rgba(52, 199, 89, 0.18); }
@@ -95,17 +93,17 @@
             margin-bottom: 15px;
             border: 1px solid var(--border-color);
             flex-shrink: 0;
+            gap: 10px;
             transition: background-color 0.3s;
         }
 
-        .top-left { flex: 1; display: flex; align-items: center; gap: 10px; justify-content: flex-start; }
-        .top-center { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--text-main); }
-        .top-right { flex: 1; display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+        .top-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .metric-box { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .top-center { font-size: 0.75rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 4px; }
+        .top-right { display: flex; align-items: center; gap: 10px; }
         
         .time-display { font-weight: 600; font-size: 0.75rem; color: var(--text-muted); }
-        .today-sale { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
-        /* Buttons */
         button {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -124,7 +122,6 @@
         button.danger:hover { background-color: rgba(255,59,48,0.1); }
         .icon-btn { font-size: 0.9rem; padding: 4px 6px; border: none; background: transparent; }
 
-        /* Split Layout Settings */
         .main-content {
             display: flex;
             gap: 15px;
@@ -133,7 +130,7 @@
         }
 
         .left-panel {
-            width: 330px;
+            width: 350px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -152,7 +149,6 @@
             transition: background-color 0.3s;
         }
 
-        /* Form Card */
         .card {
             background-color: var(--card-bg);
             border-radius: var(--radius);
@@ -173,35 +169,31 @@
             align-items: center;
         }
 
-        /* Form Elements */
-        .form-group { margin-bottom: 10px; }
-        label { display: block; margin-bottom: 4px; color: var(--text-muted); font-weight: 600; font-size: 0.7rem; }
+        .form-group { margin-bottom: 8px; }
+        label { display: block; margin-bottom: 3px; color: var(--text-muted); font-weight: 600; font-size: 0.65rem; }
         input, select {
-            width: 100%; padding: 8px 10px; border: 1px solid var(--border-color);
+            width: 100%; padding: 7px 9px; border: 1px solid var(--border-color);
             border-radius: 5px; background-color: var(--bg-color); color: var(--text-main);
             font-size: 0.75rem; font-weight: 500; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
         }
         input:focus, select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2); }
         input::placeholder { color: #8e8e93; font-weight: 400; }
 
-        /* Dynamic Item Rows Layout for Side Panel */
         .item-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             border-bottom: 1px dashed var(--border-color);
         }
         
         .form-actions { display: flex; justify-content: space-between; margin-top: 15px; }
 
-        /* Table Styles */
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.75rem; font-weight: 500; }
         th { color: var(--text-muted); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; background-color: var(--bg-color); position: sticky; top: 0; z-index: 1;}
         .item-list { list-style: none; }
-        .item-list li { margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
         .desc-text { color: var(--text-muted); font-size: 0.7rem; font-weight: 500; }
     </style>
 </head>
@@ -210,20 +202,23 @@
 <div class="app-container">
     <!-- Top Bar -->
     <div class="top-bar">
-        <!-- Left: Sales Total -->
         <div class="top-left">
-            <div class="today-sale">
-                Today: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
-                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()">Hide</button>
+            <div class="metric-box">
+                Sale: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
+                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()" style="padding: 2px 6px; font-size: 0.65rem;">Hide</button>
+            </div>
+            <div class="metric-box">
+                Profit: <span id="todayProfitValue" class="info-box" style="background-color: rgba(52, 199, 89, 0.12); color: #208736;">₹0.00</span>
+            </div>
+            <div class="metric-box">
+                Cost: <span id="todayCostValue" class="info-box" style="background-color: rgba(255, 149, 0, 0.12); color: #b25000;">₹0.00</span>
             </div>
         </div>
 
-        <!-- Center: Customer Count -->
         <div class="top-center">
-            Today's Customers: &nbsp;<span id="todayCustomerCount" class="info-box info-sno" style="margin:0;">0</span>
+            Customers: &nbsp;<span id="todayCustomerCount" class="info-box info-sno" style="margin:0;">0</span>
         </div>
 
-        <!-- Right: Clock & Theme -->
         <div class="top-right">
             <span class="time-display" id="datetimeDisplay"></span>
             <button type="button" class="icon-btn" onclick="toggleDarkMode()" id="themeIcon">🌙</button>
@@ -243,22 +238,6 @@
                 <div class="form-group">
                     <label>Customer Name</label>
                     <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
-                </div>
-
-                <!-- Vendor Selection -->
-                <div class="form-group">
-                    <label>Vendor</label>
-                    <select id="vendorName">
-                        <option value="NA">NA</option>
-                        <option value="Bhagvat Imitation">Bhagvat Imitation</option>
-                        <option value="Inayat Fashions">Inayat Fashions</option>
-                        <option value="Singh Fashion Emproium">Singh Fashion Emproium</option>
-                        <option value="A-One AD">A-One AD</option>
-                        <option value="Maa Vaishno Jewellers">Maa Vaishno Jewellers</option>
-                        <option value="Shree Shyam Jewellers">Shree Shyam Jewellers</option>
-                        <option value="Minari Mumbai">Minari Mumbai</option>
-                        <option value="Neenox/Lezara NX">Neenox/Lezara NX</option>
-                    </select>
                 </div>
 
                 <div id="itemsContainer">
@@ -290,9 +269,9 @@
                         <th>#</th>
                         <th>Date & Time</th>
                         <th>Customer</th>
-                        <th>Vendor</th>
-                        <th>Items Purchased</th>
-                        <th>Total</th>
+                        <th>Items Purchased (Prices & Profit)</th>
+                        <th>Total Sale</th>
+                        <th>Total Profit</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -306,12 +285,10 @@
 </div>
 
 <script>
-    // State Management & Categories
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
     let editingId = null;
     let saleVisible = true;
 
-    // Defined Categories
     const subCategories = {
         "RING": ["Anti Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold -White Stone", "Gold -Red Stone", "Gold -Cocktail", "Gold -Plain"],
         "Pendant": ["Anti-Tarnish", "AD"],
@@ -361,20 +338,11 @@
     }
 
     function toggleTodaySale() {
-        const valSpan = document.getElementById('todayTotalValue');
-        const btn = document.getElementById('toggleSaleBtn');
         saleVisible = !saleVisible;
-        
-        if (saleVisible) {
-            calculateTodaySale(); 
-            btn.textContent = "Hide";
-        } else {
-            valSpan.textContent = "****";
-            btn.textContent = "Show";
-        }
+        calculateTodaySale();
+        document.getElementById('toggleSaleBtn').textContent = saleVisible ? "Hide" : "Show";
     }
 
-    // Renders the Type Dropdown/Text input dynamically
     function updateSubcatUI(selectElement, selectedSub = '') {
         const category = selectElement.value;
         const descContainer = selectElement.closest('.item-row').querySelector('.desc-wrapper');
@@ -392,9 +360,8 @@
         }
     }
 
-    // Handles adding the UI row with the updated Grid Layout
-    function addItemRow(cat = '', subCat = '', note = '', price = '') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; price = ''; } 
+    function addItemRow(cat = '', subCat = '', note = '', buyPrice = '', sellPrice = '', vendor = 'Self') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; buyPrice = ''; sellPrice = ''; vendor = 'Self'; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');
@@ -410,37 +377,50 @@
 
         rowDiv.innerHTML = `
             <div class="form-group"><label>Item</label>${selectHTML}</div>
+            <div class="form-group"><label>Type</label><div class="desc-wrapper"></div></div>
             
             <div class="form-group">
-                <label>Type</label>
-                <div class="desc-wrapper"></div>
+                <label>Vendor</label>
+                <select class="item-vendor">
+                    <option value="Self" ${vendor === 'Self' ? 'selected' : ''}>Self</option>
+                    <option value="NA">NA</option>
+                        <option value="Bhagvat Imitation">Bhagvat Imitation</option>
+                        <option value="Inayat Fashions">Inayat Fashions</option>
+                        <option value="Singh Fashion Emproium">Singh Fashion Emproium</option>
+                        <option value="A-One AD">A-One AD</option>
+                        <option value="Maa Vaishno Jewellers">Maa Vaishno Jewellers</option>
+                        <option value="Shree Shyam Jewellers">Shree Shyam Jewellers</option>
+                        <option value="Minari Mumbai">Minari Mumbai</option>
+                        <option value="Neenox/Lezara NX">Neenox/Lezara NX</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Buy Price (₹)</label>
+                <input type="number" class="item-buy-price" placeholder="0" step="10" value="${buyPrice}">
+            </div>
+
+            <div class="form-group">
+                <label>Sell Price (₹)</label>
+                <input type="number" class="item-price" placeholder="0" step="10" value="${sellPrice}">
             </div>
             
             <div class="form-group" style="grid-column: span 2;">
-                <label>Note (Optional description)</label>
+                <label>Note (Optional)</label>
                 <input type="text" class="item-note" placeholder="Any extra details..." value="${note}">
             </div>
             
-            <div class="form-group">
-                <label>Price (₹)</label>
-                <!-- step="10" allows jumping by 10s with up/down arrows -->
-                <input type="number" class="item-price" placeholder="0" step="10" value="${price}">
-            </div>
-            
-            <div class="form-group" style="display: flex; align-items: flex-end; justify-content: flex-end;">
-                <button type="button" class="danger" onclick="this.parentElement.parentElement.remove()">Remove</button>
+            <div class="form-group" style="grid-column: span 2; display: flex; justify-content: flex-end;">
+                <button type="button" class="danger" onclick="this.parentElement.parentElement.remove()">Remove Item</button>
             </div>
         `;
         
         container.appendChild(rowDiv);
-        
-        // Trigger UI update immediately to load specific sub-types
         updateSubcatUI(rowDiv.querySelector('.item-category'), subCat);
     }
 
     function clearForm() {
         document.getElementById('customerName').value = '';
-        document.getElementById('vendorName').value = 'Self'; // Reset vendor
         document.getElementById('itemsContainer').innerHTML = '';
         addItemRow();
         editingId = null;
@@ -448,7 +428,6 @@
         document.getElementById('formTitle').textContent = "New Sale Entry";
         document.getElementById('saveBtn').textContent = "Add Sale";
         document.getElementById('cancelEditBtn').style.display = "none";
-        
         document.getElementById('customerName').focus();
     }
 
@@ -460,7 +439,6 @@
 
     function saveSale() {
         const nameInput = document.getElementById('customerName').value.trim();
-        const vendorInput = document.getElementById('vendorName').value;
         
         let currentSerialNo;
         if (editingId) {
@@ -470,30 +448,34 @@
             currentSerialNo = getNextSerial(); 
         }
 
-        let customerName = nameInput;
-        if (customerName === "") {
-            customerName = `Customer #${currentSerialNo}`;
-        }
+        let customerName = nameInput === "" ? `Customer #${currentSerialNo}` : nameInput;
 
         const rows = document.querySelectorAll('.item-row');
         let items = [];
         let total = 0;
+        let totalCost = 0;
+        let totalProfit = 0;
 
         rows.forEach(row => {
             const category = row.querySelector('.item-category').value;
             const subCategoryNode = row.querySelector('.item-subcat');
             const subCategory = subCategoryNode ? subCategoryNode.value.trim() : '';
+            const vendor = row.querySelector('.item-vendor').value;
             const note = row.querySelector('.item-note').value.trim();
-            const priceVal = parseFloat(row.querySelector('.item-price').value);
+            const buyPrice = parseFloat(row.querySelector('.item-buy-price').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
             
-            if (!isNaN(priceVal) && priceVal > 0) {
-                items.push({ category, subCategory, note, price: priceVal });
-                total += priceVal;
+            if (price > 0) {
+                const profit = price - buyPrice;
+                items.push({ category, subCategory, vendor, note, buyPrice, price, profit });
+                total += price;
+                totalCost += buyPrice;
+                totalProfit += profit;
             }
         });
 
         if (items.length === 0) {
-            alert("Please add at least one item with a valid price.");
+            alert("Please add at least one item with a valid sell price.");
             return;
         }
 
@@ -502,9 +484,10 @@
             serialNo: currentSerialNo,
             timestamp: editingId ? salesData.find(s => s.id === editingId).timestamp : new Date().toISOString(),
             customerName,
-            vendorName: vendorInput,
             items,
-            total
+            total,
+            totalCost,
+            totalProfit
         };
 
         if (editingId) {
@@ -525,14 +508,10 @@
         if (!sale) return;
 
         document.getElementById('customerName').value = sale.customerName;
-        document.getElementById('vendorName').value = sale.vendorName || 'Self';
         document.getElementById('itemsContainer').innerHTML = '';
         
         sale.items.forEach(item => {
-            // Handles backward compatibility if subCategory is missing from old saves
-            const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
-            const noteData = item.note || '';
-            addItemRow(item.category, subCatData, noteData, item.price);
+            addItemRow(item.category, item.subCategory || '', item.note || '', item.buyPrice || '', item.price, item.vendor || 'Self');
         });
 
         editingId = id;
@@ -547,9 +526,7 @@
         if(confirm("Are you sure you want to delete this entry?")) {
             salesData = salesData.filter(s => s.id !== id);
             localStorage.setItem('salesData', JSON.stringify(salesData));
-            
             if(editingId === id) clearForm();
-            
             renderTable();
             calculateTodaySale();
         }
@@ -560,11 +537,9 @@
             if(confirm("Are you absolutely sure? All records will be permanently lost.")) {
                 salesData = [];
                 localStorage.removeItem('salesData');
-                
                 clearForm();
                 renderTable();
                 calculateTodaySale();
-                
                 alert("All data has been cleared.");
             }
         }
@@ -579,20 +554,34 @@
             const dateStr = dateObj.toLocaleDateString([], {month:'short', day:'numeric'}) + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const serialDisplay = sale.serialNo ? sale.serialNo : '-';
 
+            // Calculate or extract record totals
+            let saleTotal = sale.total || 0;
+            let saleProfit = sale.totalProfit;
+            if (saleProfit === undefined) {
+                saleProfit = sale.items.reduce((acc, item) => acc + (item.price - (item.buyPrice || 0)), 0);
+            }
+
             let itemsHTML = '<ul class="item-list">';
             sale.items.forEach(item => {
-                // Formatting Subcategory + Note
-                const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
-                const noteData = item.note || '';
-                
-                // Construct the "Pendant > anti-tarnish" tag
-                const catString = subCatData ? `${item.category} > ${subCatData}` : item.category;
-                const noteStr = noteData ? `<span class="desc-text">(${noteData})</span>` : '';
+                const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
+                const noteStr = item.note ? `<span class="desc-text">(${item.note})</span>` : '';
+                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
+                const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
+                const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
+                const itemProfit = item.price - (item.buyPrice || 0);
+                const profitTag = `<span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736;">Profit: ₹${itemProfit.toFixed(2)}</span>`;
 
-                itemsHTML += `<li>
-                    <span class="info-box info-cat">${catString}</span>
-                    ${noteStr}
-                    <span class="info-box info-amount">₹${item.price.toFixed(2)}</span>
+                itemsHTML += `<li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dotted var(--border-color); display: flex; flex-direction: column; gap: 3px;">
+                    <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                        <span class="info-box info-cat">${catString}</span>
+                        ${vendorTag}
+                        ${noteStr}
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        ${buyTag}
+                        ${sellTag}
+                        ${profitTag}
+                    </div>
                 </li>`;
             });
             itemsHTML += '</ul>';
@@ -602,9 +591,9 @@
                 <td><span class="info-box info-sno">#${serialDisplay}</span></td>
                 <td><span class="info-box info-date">${dateStr}</span></td>
                 <td style="font-weight: 700; font-size: 0.8rem;">${sale.customerName}</td>
-                <td><span class="info-box" style="background-color: rgba(142, 142, 147, 0.15); color: var(--text-main);">${sale.vendorName || 'Self'}</span></td>
                 <td>${itemsHTML}</td>
-                <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${sale.total.toFixed(2)}</span></td>
+                <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${saleTotal.toFixed(2)}</span></td>
+                <td><span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736; font-size: 0.8rem;">₹${saleProfit.toFixed(2)}</span></td>
                 <td>
                     <button type="button" onclick="editSale(${sale.id})" style="margin-bottom: 4px;">Edit</button><br>
                     <button type="button" class="danger" onclick="deleteSale(${sale.id})">Del</button>
@@ -616,27 +605,39 @@
 
     function calculateTodaySale() {
         const today = new Date().toLocaleDateString();
-        let total = 0;
+        let totalSale = 0;
+        let totalCost = 0;
+        let totalProfit = 0;
         let customerCount = 0;
         
         salesData.forEach(sale => {
             const saleDate = new Date(sale.timestamp).toLocaleDateString();
             if (saleDate === today) {
-                total += sale.total;
                 customerCount++;
+                sale.items.forEach(item => {
+                    const bPrice = item.buyPrice || 0;
+                    const sPrice = item.price || 0;
+                    totalSale += sPrice;
+                    totalCost += bPrice;
+                    totalProfit += (sPrice - bPrice);
+                });
             }
         });
 
-        // Update customer count
-        const countElement = document.getElementById('todayCustomerCount');
-        if (countElement) countElement.textContent = customerCount;
+        document.getElementById('todayCustomerCount').textContent = customerCount;
 
-        // Update total money if visible
         const valSpan = document.getElementById('todayTotalValue');
+        const profitSpan = document.getElementById('todayProfitValue');
+        const costSpan = document.getElementById('todayCostValue');
+
         if (saleVisible) {
-            valSpan.textContent = `₹${total.toFixed(2)}`;
+            valSpan.textContent = `₹${totalSale.toFixed(2)}`;
+            profitSpan.textContent = `₹${totalProfit.toFixed(2)}`;
+            costSpan.textContent = `₹${totalCost.toFixed(2)}`;
         } else {
             valSpan.textContent = "****";
+            profitSpan.textContent = "****";
+            costSpan.textContent = "****";
         }
     }
 
@@ -646,28 +647,33 @@
             return;
         }
 
-        let csvContent = "S.No.,Date,Time,Customer Name,Vendor,Item Category,Item Type,Extra Note,Item Price,Sale Total\n";
+        let csvContent = "S.No.,Date,Time,Customer Name,Item Category,Item Type,Vendor,Buy Price,Sell Price,Profit,Extra Note,Sale Total,Sale Profit\n";
 
         salesData.forEach(sale => {
             const dateObj = new Date(sale.timestamp);
             const date = dateObj.toLocaleDateString();
             const time = dateObj.toLocaleTimeString();
             const customer = `"${sale.customerName.replace(/"/g, '""')}"`;
-            const vendor = `"${(sale.vendorName || 'Self').replace(/"/g, '""')}"`;
-            const total = sale.total.toFixed(2);
             const sno = sale.serialNo || '';
+            const total = sale.total.toFixed(2);
+            const saleProfit = (sale.totalProfit !== undefined ? sale.totalProfit : sale.items.reduce((acc, i) => acc + (i.price - (i.buyPrice || 0)), 0)).toFixed(2);
 
             sale.items.forEach((item, index) => {
-                const subCatData = item.subCategory !== undefined ? item.subCategory : (item.desc || '');
+                const subCatData = item.subCategory || '';
                 const noteData = item.note || '';
+                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
 
                 const cat = item.category;
                 const type = `"${subCatData.replace(/"/g, '""')}"`;
                 const note = `"${noteData.replace(/"/g, '""')}"`;
-                const price = item.price.toFixed(2);
+                const buyPrice = (item.buyPrice || 0).toFixed(2);
+                const sellPrice = item.price.toFixed(2);
+                const profit = (item.price - (item.buyPrice || 0)).toFixed(2);
                 
                 const displayTotal = (index === sale.items.length - 1) ? total : "";
-                csvContent += `${sno},${date},${time},${customer},${vendor},${cat},${type},${note},${price},${displayTotal}\n`;
+                const displaySaleProfit = (index === sale.items.length - 1) ? saleProfit : "";
+                
+                csvContent += `${sno},${date},${time},${customer},${cat},${type},${itemVendor},${buyPrice},${sellPrice},${profit},${note},${displayTotal},${displaySaleProfit}\n`;
             });
         });
 

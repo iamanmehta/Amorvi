@@ -624,8 +624,8 @@
     }
     function clearAllData() {
         // Double confirmation to prevent accidental clicks
-        if(confirm("🚨 WARNING: Are you sure you want to delete ALL sales data? This cannot be undone!")) {
-            if(confirm("Are you absolutely sure? All records will be permanently lost.")) {
+        if(confirm("🚨 WARNING: Are you sure you want to delete today's all sales data? This cannot be undone!")) {
+            if(confirm("Are you absolutely sure? Make sure you have exported the data.")) {
                 // Clear the array
                 salesData = [];
                 // Remove from local storage

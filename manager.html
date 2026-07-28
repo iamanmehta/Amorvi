@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager</title>
+    <title>Sales Tracker</title>
     <style>
         :root {
             /* Light Mode */
@@ -23,7 +23,7 @@
 
         [data-theme="dark"] {
             /* Dark Mode */
-            --page-bg: #808080;
+            --page-bg: #000000;
             --bg-color: #151516;
             --card-bg: #1c1c1e;
             --text-main: #ffffff;
@@ -98,7 +98,10 @@
             transition: background-color 0.3s;
         }
 
-        .top-left, .top-right { display: flex; align-items: center; gap: 10px; }
+        .top-left { flex: 1; display: flex; align-items: center; gap: 10px; justify-content: flex-start; }
+        .top-center { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: var(--text-main); }
+        .top-right { flex: 1; display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+        
         .time-display { font-weight: 600; font-size: 0.75rem; color: var(--text-muted); }
         .today-sale { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 
@@ -207,12 +210,20 @@
 <div class="app-container">
     <!-- Top Bar -->
     <div class="top-bar">
+        <!-- Left: Sales Total -->
         <div class="top-left">
             <div class="today-sale">
-                Today's total Sale: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
+                Today: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
                 <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()">Hide</button>
             </div>
         </div>
+
+        <!-- Center: Customer Count -->
+        <div class="top-center">
+            Today's Customers: &nbsp;<span id="todayCustomerCount" class="info-box info-sno" style="margin:0;">0</span>
+        </div>
+
+        <!-- Right: Clock & Theme -->
         <div class="top-right">
             <span class="time-display" id="datetimeDisplay"></span>
             <button type="button" class="icon-btn" onclick="toggleDarkMode()" id="themeIcon">🌙</button>
@@ -231,7 +242,18 @@
                 
                 <div class="form-group">
                     <label>Customer Name</label>
-                    <input type="text" id="customerName" placeholder="Customer Name" autocomplete="off" autofocus>
+                    <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
+                </div>
+
+                <!-- Vendor Selection -->
+                <div class="form-group">
+                    <label>Vendor</label>
+                    <select id="vendorName">
+                        <option value="Self">Self</option>
+                        <option value="Vendor A">Vendor A</option>
+                        <option value="Vendor B">Vendor B</option>
+                        <option value="Vendor C">Vendor C</option>
+                    </select>
                 </div>
 
                 <div id="itemsContainer">
@@ -251,18 +273,19 @@
         <!-- RIGHT PANEL -->
         <div class="right-panel">
             <div class="card-header" style="padding: 12px; margin-bottom: 0; border: none; background: var(--card-bg); position: sticky; top: 0; z-index: 2;">
-    <span>Sales Records</span>
-    <div>
-        <button type="button" class="danger" onclick="clearAllData()" style="margin-right: 8px;">Wipe Data</button>
-        <button type="button" onclick="exportToExcel()">Export</button>
-    </div>
-</div>
+                <span>Sales Records</span>
+                <div>
+                    <button type="button" class="danger" onclick="clearAllData()" style="margin-right: 8px;">Clear All Data</button>
+                    <button type="button" onclick="exportToExcel()">Export (Excel)</button>
+                </div>
+            </div>
             <table>
                 <thead>
                     <tr>
-                        <th>Sr.</th>
+                        <th>#</th>
                         <th>Date & Time</th>
                         <th>Customer</th>
+                        <th>Vendor</th>
                         <th>Items Purchased</th>
                         <th>Total</th>
                         <th>Actions</th>
@@ -285,13 +308,13 @@
 
     // Defined Categories
     const subCategories = {
-        "RING": ["Anti-Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold- White stone", "Gold -Red Stone", "Gold- Cocktail", "Gold Plain"],
-        "Pendant": ["Anti-Tarnish", "AD"],
-        "Bracelet": ["Anti-Tarnish", "AD", "Anti-Tarnish Chained", "AD chained"],
-        "Earring": ["General Studs", "Anti-Tarnish Studs", "Korean Studs", "Korean", "Anti-tarnish", "Hoops", "AD Earrings", "AD Studs", "Indo-Western", "Partywear", "Funky"],
-        "Chain": ["Micro-Gold Plated", "Anti-Tarnish"],
-        "Set": ["Anti-Tarnish", "AD Simple", "AD 2 Layer", "AD 3 Layer", "AD Heavy", "AD Choker"],
-        "Necklace": ["Anti-Tarnish", "AD"]
+        "RING": ["anti tarnish", "korean", "ad-cocktail", "ad-medium", "ad-small", "gold-white stone", "gold-red stone", "gold-cocktail", "gold plain"],
+        "Pendant": ["anti-tarnish", "ad"],
+        "Bracelet": ["anti-tarnish", "ad", "anti-tarnish chained", "ad chained"],
+        "Earring": ["Korean", "Anti-tarnish", "hoops", "ad earrings", "ad studs", "iw", "pw", "funky"],
+        "Chain": [], // Empty array = blank text box
+        "Set": ["anti-tarnish", "ad simple", "ad 2 layer", "ad 3 layer", "ad heavy", "ad choker"],
+        "Necklace": ["anti-tarnish", "ad"]
     };
     
     const categoriesList = Object.keys(subCategories);
@@ -390,11 +413,12 @@
             
             <div class="form-group" style="grid-column: span 2;">
                 <label>Note (Optional description)</label>
-                <input type="text" class="item-note" placeholder="details.." value="${note}">
+                <input type="text" class="item-note" placeholder="Any extra details..." value="${note}">
             </div>
             
             <div class="form-group">
                 <label>Price (₹)</label>
+                <!-- step="10" allows jumping by 10s with up/down arrows -->
                 <input type="number" class="item-price" placeholder="0" step="10" value="${price}">
             </div>
             
@@ -411,11 +435,12 @@
 
     function clearForm() {
         document.getElementById('customerName').value = '';
+        document.getElementById('vendorName').value = 'Self'; // Reset vendor
         document.getElementById('itemsContainer').innerHTML = '';
         addItemRow();
         editingId = null;
         
-        document.getElementById('formTitle').textContent = "New Sale";
+        document.getElementById('formTitle').textContent = "New Sale Entry";
         document.getElementById('saveBtn').textContent = "Add Sale";
         document.getElementById('cancelEditBtn').style.display = "none";
         
@@ -430,6 +455,7 @@
 
     function saveSale() {
         const nameInput = document.getElementById('customerName').value.trim();
+        const vendorInput = document.getElementById('vendorName').value;
         
         let currentSerialNo;
         if (editingId) {
@@ -471,6 +497,7 @@
             serialNo: currentSerialNo,
             timestamp: editingId ? salesData.find(s => s.id === editingId).timestamp : new Date().toISOString(),
             customerName,
+            vendorName: vendorInput,
             items,
             total
         };
@@ -493,6 +520,7 @@
         if (!sale) return;
 
         document.getElementById('customerName').value = sale.customerName;
+        document.getElementById('vendorName').value = sale.vendorName || 'Self';
         document.getElementById('itemsContainer').innerHTML = '';
         
         sale.items.forEach(item => {
@@ -519,6 +547,21 @@
             
             renderTable();
             calculateTodaySale();
+        }
+    }
+
+    function clearAllData() {
+        if(confirm("🚨 WARNING: Are you sure you want to delete ALL sales data? This cannot be undone!")) {
+            if(confirm("Are you absolutely sure? All records will be permanently lost.")) {
+                salesData = [];
+                localStorage.removeItem('salesData');
+                
+                clearForm();
+                renderTable();
+                calculateTodaySale();
+                
+                alert("All data has been cleared.");
+            }
         }
     }
 
@@ -554,6 +597,7 @@
                 <td><span class="info-box info-sno">#${serialDisplay}</span></td>
                 <td><span class="info-box info-date">${dateStr}</span></td>
                 <td style="font-weight: 700; font-size: 0.8rem;">${sale.customerName}</td>
+                <td><span class="info-box" style="background-color: rgba(142, 142, 147, 0.15); color: var(--text-main);">${sale.vendorName || 'Self'}</span></td>
                 <td>${itemsHTML}</td>
                 <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${sale.total.toFixed(2)}</span></td>
                 <td>
@@ -566,19 +610,29 @@
     }
 
     function calculateTodaySale() {
-        if (!saleVisible) return;
-        
         const today = new Date().toLocaleDateString();
         let total = 0;
+        let customerCount = 0;
         
         salesData.forEach(sale => {
             const saleDate = new Date(sale.timestamp).toLocaleDateString();
             if (saleDate === today) {
                 total += sale.total;
+                customerCount++;
             }
         });
 
-        document.getElementById('todayTotalValue').textContent = `₹${total.toFixed(2)}`;
+        // Update customer count
+        const countElement = document.getElementById('todayCustomerCount');
+        if (countElement) countElement.textContent = customerCount;
+
+        // Update total money if visible
+        const valSpan = document.getElementById('todayTotalValue');
+        if (saleVisible) {
+            valSpan.textContent = `₹${total.toFixed(2)}`;
+        } else {
+            valSpan.textContent = "****";
+        }
     }
 
     function exportToExcel() {
@@ -587,13 +641,14 @@
             return;
         }
 
-        let csvContent = "S.No.,Date,Time,Customer Name,Item Category,Item Type,Extra Note,Item Price,Sale Total\n";
+        let csvContent = "S.No.,Date,Time,Customer Name,Vendor,Item Category,Item Type,Extra Note,Item Price,Sale Total\n";
 
         salesData.forEach(sale => {
             const dateObj = new Date(sale.timestamp);
             const date = dateObj.toLocaleDateString();
             const time = dateObj.toLocaleTimeString();
             const customer = `"${sale.customerName.replace(/"/g, '""')}"`;
+            const vendor = `"${(sale.vendorName || 'Self').replace(/"/g, '""')}"`;
             const total = sale.total.toFixed(2);
             const sno = sale.serialNo || '';
 
@@ -607,7 +662,7 @@
                 const price = item.price.toFixed(2);
                 
                 const displayTotal = (index === sale.items.length - 1) ? total : "";
-                csvContent += `${sno},${date},${time},${customer},${cat},${type},${note},${price},${displayTotal}\n`;
+                csvContent += `${sno},${date},${time},${customer},${vendor},${cat},${type},${note},${price},${displayTotal}\n`;
             });
         });
 
@@ -621,24 +676,6 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
-    function clearAllData() {
-        // Double confirmation to prevent accidental clicks
-        if(confirm("🚨 WARNING: Are you sure you want to delete today's all sales data? This cannot be undone!")) {
-            if(confirm("Are you absolutely sure? Make sure you have exported the data.")) {
-                // Clear the array
-                salesData = [];
-                // Remove from local storage
-                localStorage.removeItem('salesData');
-                
-                // Reset the UI
-                clearForm();
-                renderTable();
-                calculateTodaySale();
-                
-                alert("All data has been cleared.");
-            }
-        }
     }
 </script>
 </body>

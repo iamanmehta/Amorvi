@@ -97,9 +97,8 @@
             transition: background-color 0.3s;
         }
 
-        .top-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .metric-box { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
-        .top-center { font-size: 0.75rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 4px; }
+        .top-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .metric-box { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; color: var(--text-main); }
         .top-right { display: flex; align-items: center; gap: 10px; }
         
         .time-display { font-weight: 600; font-size: 0.75rem; color: var(--text-muted); }
@@ -114,13 +113,19 @@
             font-size: 0.7rem;
             font-weight: 600;
             transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 28px;
         }
         button:hover { background-color: var(--page-bg); }
         button.primary { background-color: var(--accent-blue); color: white; border: none; }
         button.primary:hover { background-color: var(--accent-blue-hover); }
         button.danger { background-color: transparent; color: var(--danger); border-color: var(--danger); }
         button.danger:hover { background-color: rgba(255,59,48,0.1); }
-        .icon-btn { font-size: 0.9rem; padding: 4px 6px; border: none; background: transparent; }
+        
+        .icon-btn { font-size: 1rem; padding: 4px; border: none; background: transparent; display: inline-flex; align-items: center; justify-content: center; height: auto; }
+        .icon-btn:hover { background: transparent; transform: scale(1.1); }
 
         .main-content {
             display: flex;
@@ -130,11 +135,12 @@
         }
 
         .left-panel {
-            width: 350px;
+            width: 380px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            padding-right: 5px;
         }
 
         .right-panel {
@@ -169,7 +175,7 @@
             align-items: center;
         }
 
-        .form-group { margin-bottom: 8px; }
+        .form-group { margin-bottom: 8px; width: 100%; }
         label { display: block; margin-bottom: 3px; color: var(--text-muted); font-weight: 600; font-size: 0.65rem; }
         input, select {
             width: 100%; padding: 7px 9px; border: 1px solid var(--border-color);
@@ -179,27 +185,42 @@
         input:focus, select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2); }
         input::placeholder { color: #8e8e93; font-weight: 400; }
 
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+
         .item-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
             border-bottom: 1px dashed var(--border-color);
+            background-color: var(--bg-color);
+            padding: 10px;
+            border-radius: var(--radius);
         }
         
-        .form-actions { display: flex; justify-content: space-between; margin-top: 15px; }
-
+        .form-actions { display: flex; justify-content: space-between; margin-top: 15px; flex-wrap: wrap; gap: 8px; }
+        
+        /* Table Styles */
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.75rem; font-weight: 500; }
         th { color: var(--text-muted); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; background-color: var(--bg-color); position: sticky; top: 0; z-index: 1;}
         .item-list { list-style: none; }
         .desc-text { color: var(--text-muted); font-size: 0.7rem; font-weight: 500; }
+
+        /* Godline Input */
+        .godline-text { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-style: normal; 
+            font-weight: 700; 
+            color: var(--accent-blue); 
+            font-size: 0.95rem;
+        }
+        [data-theme="dark"] .godline-text { color: #409cff; }
+
     </style>
 </head>
 <body>
-
-    <p>Jai shree shyam</p>
 
 <div class="app-container">
     <!-- Top Bar -->
@@ -207,7 +228,7 @@
         <div class="top-left">
             <div class="metric-box">
                 Sale: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
-                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()" style="padding: 2px 6px; font-size: 0.65rem;">Hide</button>
+                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()" style="padding: 2px 6px; font-size: 0.65rem; height: auto;">Hide</button>
             </div>
             <div class="metric-box">
                 Profit: <span id="todayProfitValue" class="info-box" style="background-color: rgba(52, 199, 89, 0.12); color: #208736;">₹0.00</span>
@@ -215,10 +236,9 @@
             <div class="metric-box">
                 Cost: <span id="todayCostValue" class="info-box" style="background-color: rgba(255, 149, 0, 0.12); color: #b25000;">₹0.00</span>
             </div>
-        </div>
-
-        <div class="top-center">
-            Customers: &nbsp;<span id="todayCustomerCount" class="info-box info-sno" style="margin:0;">0</span>
+            <div class="metric-box">
+                Customers: <span id="todayCustomerCount" class="info-box info-sno" style="margin-left: 4px;">0</span>
+            </div>
         </div>
 
         <div class="top-right">
@@ -232,7 +252,7 @@
         
         <!-- LEFT PANEL -->
         <div class="left-panel">
-            <div class="card">
+            <div class="card" style="padding-bottom: 5px;">
                 <div class="card-header">
                     <span id="formTitle">New Sale Entry</span>
                 </div>
@@ -242,39 +262,78 @@
                     <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
                 </div>
 
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Experience Details</div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Bill No.</label>
+                        <input type="text" id="billNo">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Mode</label>
+                        <select id="paymentMode">
+                            <option value="Cash">Cash</option>
+                            <option value="Card">Card</option>
+                            <option value="UPI">UPI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+                    <label>Carry Bag</label>
+                    <select id="carryBag">
+                        <option value="Paper Pouch">Paper Pouch</option>
+                        <option value="Stamped Carry bag">Stamped Carry bag</option>
+                        <option value="Branded Carry bag">Branded Carry bag</option>
+                    </select>
+                </div>
+                
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Item Details</div>
+
                 <div id="itemsContainer">
                     <!-- Item rows injected here -->
                 </div>
 
-                <div class="form-actions">
+                <div class="form-actions" style="margin-top: 10px;">
                     <button type="button" onclick="addItemRow()">+ Add Item</button>
                     <div style="display: flex; gap: 6px;">
                         <button type="button" id="cancelEditBtn" onclick="clearForm()" style="display: none;">Cancel</button>
                         <button type="button" class="primary" id="saveBtn" onclick="saveSale()">Add Sale</button>
                     </div>
                 </div>
+                <div style="margin-top: 10px; text-align: right;">
+                    <button type="button" class="danger" id="deleteEntryBtn" onclick="deleteCurrentSale()" style="display: none; width: 100%;">Delete this entry</button>
+                </div>
             </div>
         </div>
 
         <!-- RIGHT PANEL -->
         <div class="right-panel">
-            <div class="card-header" style="padding: 12px; margin-bottom: 0; border: none; background: var(--card-bg); position: sticky; top: 0; z-index: 2;">
-                <span>Sales Records</span>
-                <div>
-                    <button type="button" class="danger" onclick="clearAllData()" style="margin-right: 8px;">Clear All Data</button>
+            <div class="card-header" style="padding: 12px; margin-bottom: 0; border: none; background: var(--card-bg); position: sticky; top: 0; z-index: 2; display: flex; align-items: center;">
+                <div style="flex: 1;">
+                    <span>Sales Records</span>
+                </div>
+                
+                <!-- Godline Section -->
+                <div id="godlineContainer" style="flex: 2; text-align: center; display: flex; justify-content: center; align-items: center; gap: 5px;">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- Symmetric Header Buttons -->
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 1;">
+                    <button type="button" class="danger" onclick="clearAllData()">Clear All Data</button>
                     <button type="button" onclick="exportToExcel()">Export (Excel)</button>
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Date & Time</th>
-                        <th>Customer</th>
-                        <th>Item Summary</th>
-                        <th>Total Sale</th>
-                        <th>Total Profit</th>
-                        <th>Actions</th>
+                        <th style="width: 50px;">#</th>
+                        <th style="width: 100px;">Date & Time</th>
+                        <th style="width: 220px;">Customer Details</th>
+                        <th>Items Purchased (Prices & Profit)</th>
+                        <th style="width: 90px;">Total Sale</th>
+                        <th style="width: 90px;">Total Profit</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
@@ -290,15 +349,16 @@
     let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
     let editingId = null;
     let saleVisible = true;
+    let godlineText = localStorage.getItem('godline') || "Trust the Process ✨";
 
     const subCategories = {
-        "RING": ["Anti Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold -White Stone", "Gold -Red Stone", "Gold -Cocktail", "Gold -Plain"],
-        "Pendant": ["Anti-Tarnish", "AD"],
-        "Bracelet": ["Anti-Tarnish", "AD", "Anti-Tarnish Chained", "AD Chained"],
-        "Earring": ["Korean", "Anti-tarnish", "Hoops", "AD Earrings", "Anti-Tarnish Studs", "General Studs", "AD studs","Gold Studs", "Indo-Western", "Partywear", "Funky"],
-        "Chain": ["AT Sleek Snake", "AT Snake", "AT Balls", "Silver", "Micro-Gold 18 Inch 1L" ,"Micro-Gold 18 Inch 2L" ,"Micro-Gold 24 Inch 2L", "Micro-Gold 24 Inch 3L" ,"Men's"],
-        "Set": ["Anti-Tarnish", "AD One", "AD 2 Layer", "AD 3 layer", "AD Heavy", "AD choker" ,"Indian Kundan/Polki Stone cut (Small)" ,"Indian Kundan/Polki Stone cut (Big)"],
-        "Necklace": ["Anti-Tarnish", "AD"]
+        "RING": ["anti tarnish", "korean", "ad-cocktail", "ad-medium", "ad-small", "gold-white stone", "gold-red stone", "gold-cocktail", "gold plain"],
+        "Pendant": ["anti-tarnish", "ad"],
+        "Bracelet": ["anti-tarnish", "ad", "anti-tarnish chained", "ad chained"],
+        "Earring": ["Korean", "Anti-tarnish", "hoops", "ad earrings", "ad studs", "iw", "pw", "funky"],
+        "Chain": [],
+        "Set": ["anti-tarnish", "ad simple", "ad 2 layer", "ad 3 layer", "ad heavy", "ad choker"],
+        "Necklace": ["anti-tarnish", "ad"]
     };
     
     const categoriesList = Object.keys(subCategories);
@@ -312,6 +372,8 @@
             document.getElementById('themeIcon').textContent = '☀️';
         }
 
+        renderGodline();
+        document.getElementById('billNo').value = getTodayBillPrefix();
         addItemRow(); 
         renderTable();
         calculateTodaySale();
@@ -322,6 +384,12 @@
         const now = new Date();
         const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         document.getElementById('datetimeDisplay').textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    function getTodayBillPrefix() {
+        const d = new Date();
+        // Day + Month (1-indexed) + Hyphen
+        return `${d.getDate()}${d.getMonth() + 1}-`;
     }
 
     function toggleDarkMode() {
@@ -345,6 +413,37 @@
         document.getElementById('toggleSaleBtn').textContent = saleVisible ? "Hide" : "Show";
     }
 
+    /* --- Godline Logic --- */
+    function renderGodline() {
+        const container = document.getElementById('godlineContainer');
+        container.innerHTML = `
+            <span class="godline-text">${godlineText}</span>
+            <button type="button" class="icon-btn" onclick="editGodline()" title="Edit line" style="margin-left: 2px;">✏️</button>
+        `;
+    }
+
+    function editGodline() {
+        const container = document.getElementById('godlineContainer');
+        container.innerHTML = `
+            <input type="text" id="godlineInput" value="${godlineText}" style="width: 250px; padding: 4px 8px; text-align: center;">
+            <button type="button" class="primary" onclick="saveGodline()" style="padding: 4px 8px; font-size: 0.65rem;">Save</button>
+        `;
+        document.getElementById('godlineInput').focus();
+        document.getElementById('godlineInput').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') saveGodline();
+        });
+    }
+
+    function saveGodline() {
+        const inputVal = document.getElementById('godlineInput').value.trim();
+        if(inputVal) {
+            godlineText = inputVal;
+            localStorage.setItem('godline', godlineText);
+        }
+        renderGodline();
+    }
+    /* --------------------- */
+
     function updateSubcatUI(selectElement, selectedSub = '') {
         const category = selectElement.value;
         const descContainer = selectElement.closest('.item-row').querySelector('.desc-wrapper');
@@ -353,17 +452,23 @@
         if (options && options.length > 0) {
             let selectHTML = `<select class="item-subcat">`;
             options.forEach(opt => {
-                selectHTML += `<option value="${opt}" ${selectedSub === opt ? 'selected' : ''}>${opt}</option>`;
+                selectHTML += `<option value="${opt}">${opt}</option>`;
             });
             selectHTML += `</select>`;
             descContainer.innerHTML = selectHTML;
+            if (selectedSub) {
+                const subSelect = descContainer.querySelector('.item-subcat');
+                if([...subSelect.options].some(o => o.value === selectedSub)) {
+                    subSelect.value = selectedSub;
+                }
+            }
         } else {
             descContainer.innerHTML = `<input type="text" class="item-subcat" placeholder="Enter type..." value="${selectedSub}">`;
         }
     }
 
-    function addItemRow(cat = '', subCat = '', note = '', buyPrice = '', sellPrice = '', vendor = 'NA') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; buyPrice = ''; sellPrice = ''; vendor = 'NA'; } 
+    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'Self', note = '', packaging = 'Packet') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'Self'; note = ''; packaging = 'Packet'; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');
@@ -373,58 +478,79 @@
 
         let selectHTML = `<select class="item-category" onchange="updateSubcatUI(this)">`;
         categoriesList.forEach(c => {
-            selectHTML += `<option value="${c}" ${defaultCat === c ? 'selected' : ''}>${c}</option>`;
+            selectHTML += `<option value="${c}">${c}</option>`;
         });
         selectHTML += `</select>`;
 
         rowDiv.innerHTML = `
-            <div class="form-group"><label>Item</label>${selectHTML}</div>
-            <div class="form-group"><label>Type</label><div class="desc-wrapper"></div></div>
-            
-            <div class="form-group">
-                <label>Vendor</label>
-                <select class="item-vendor">
-                    <option value="NA" ${vendor === 'NA' ? 'selected' : ''}>NA</option>
-                        <option value="Bhagvat Imitation">Bhagvat Imitation</option>
-                        <option value="Inayat Fashions">Inayat Fashions</option>
-                        <option value="Singh Fashion Emproium">Singh Fashion Emproium</option>
-                        <option value="VM Jewellers">VM Jewellers</option>
-                        <option value="VK Fashion Mart">VK Fashion Mart</option>
-                        <option value="A-One AD">A-One AD</option>
-                        <option value="Maa Vaishno Jewellers">Maa Vaishno Jewellers</option>
-                        <option value="Shree Shyam Jewellers">Shree Shyam Jewellers</option>
-                        <option value="Minari Mumbai">Minari Mumbai</option>
-                        <option value="Aggarwal Novelties">Aggarwak Novelties</option>
-                        <option value="Neenox/Lezara NX">Neenox/Lezara NX</option>
-                </select>
+            <div class="form-grid-2">
+                <div class="form-group"><label>Item Category</label>${selectHTML}</div>
+                <div class="form-group"><label>Type</label><div class="desc-wrapper"></div></div>
             </div>
             
-            <div class="form-group">
-                <label>Buy Price (₹)</label>
-                <input type="number" class="item-buy-price" placeholder="0" step="10" value="${buyPrice}">
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Sell Price (₹)</label>
+                    <input type="number" class="item-price" placeholder="0" step="10">
+                </div>
+                <div class="form-group">
+                    <label>Buy Price (₹)</label>
+                    <input type="number" class="item-buy-price" placeholder="0" step="10">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Sell Price (₹)</label>
-                <input type="number" class="item-price" placeholder="0" step="10" value="${sellPrice}">
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Vendor</label>
+                    <select class="item-vendor">
+                        <option value="Self">Self</option>
+                        <option value="Vendor A">Vendor A</option>
+                        <option value="Vendor B">Vendor B</option>
+                        <option value="Vendor C">Vendor C</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Note</label>
+                    <input type="text" class="item-note" placeholder="Extra details...">
+                </div>
             </div>
             
-            <div class="form-group" style="grid-column: span 2;">
-                <label>Note (Optional)</label>
-                <input type="text" class="item-note" placeholder="Any extra details..." value="${note}">
-            </div>
-            
-            <div class="form-group" style="grid-column: span 2; display: flex; justify-content: flex-end;">
-                <button type="button" class="danger" onclick="this.parentElement.parentElement.remove()">Remove Item</button>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Packaging</label>
+                    <select class="item-packaging">
+                        <option value="Packet">Packet</option>
+                        <option value="Packet with card">Packet with card</option>
+                        <option value="Zipper">Zipper</option>
+                        <option value="3x3 Box">3x3 Box</option>
+                        <option value="4x4 Box">4x4 Box</option>
+                        <option value="5x6 Box">5x6 Box</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: flex; align-items: flex-end; justify-content: flex-end;">
+                    <button type="button" class="danger" style="font-size: 0.65rem; padding: 6px 10px;" onclick="this.closest('.item-row').remove()">- Remove Item</button>
+                </div>
             </div>
         `;
         
         container.appendChild(rowDiv);
+
+        if (cat) rowDiv.querySelector('.item-category').value = cat;
+        if (vendor) rowDiv.querySelector('.item-vendor').value = vendor;
+        if (packaging) rowDiv.querySelector('.item-packaging').value = packaging;
+        if (buyPrice !== '') rowDiv.querySelector('.item-buy-price').value = buyPrice;
+        if (sellPrice !== '') rowDiv.querySelector('.item-price').value = sellPrice;
+        if (note !== '') rowDiv.querySelector('.item-note').value = note;
+        
         updateSubcatUI(rowDiv.querySelector('.item-category'), subCat);
     }
 
     function clearForm() {
         document.getElementById('customerName').value = '';
+        document.getElementById('billNo').value = getTodayBillPrefix();
+        document.getElementById('paymentMode').value = 'Cash';
+        document.getElementById('carryBag').value = 'Paper Pouch';
+
         document.getElementById('itemsContainer').innerHTML = '';
         addItemRow();
         editingId = null;
@@ -432,6 +558,7 @@
         document.getElementById('formTitle').textContent = "New Sale Entry";
         document.getElementById('saveBtn').textContent = "Add Sale";
         document.getElementById('cancelEditBtn').style.display = "none";
+        document.getElementById('deleteEntryBtn').style.display = "none";
         document.getElementById('customerName').focus();
     }
 
@@ -443,6 +570,9 @@
 
     function saveSale() {
         const nameInput = document.getElementById('customerName').value.trim();
+        const billNo = document.getElementById('billNo').value.trim();
+        const paymentMode = document.getElementById('paymentMode').value;
+        const carryBag = document.getElementById('carryBag').value;
         
         let currentSerialNo;
         if (editingId) {
@@ -466,12 +596,13 @@
             const subCategory = subCategoryNode ? subCategoryNode.value.trim() : '';
             const vendor = row.querySelector('.item-vendor').value;
             const note = row.querySelector('.item-note').value.trim();
+            const packaging = row.querySelector('.item-packaging').value;
             const buyPrice = parseFloat(row.querySelector('.item-buy-price').value) || 0;
             const price = parseFloat(row.querySelector('.item-price').value) || 0;
             
-            if (price > 0) {
+            if (price > 0 || buyPrice > 0) {
                 const profit = price - buyPrice;
-                items.push({ category, subCategory, vendor, note, buyPrice, price, profit });
+                items.push({ category, subCategory, vendor, note, buyPrice, price, profit, packaging });
                 total += price;
                 totalCost += buyPrice;
                 totalProfit += profit;
@@ -479,7 +610,7 @@
         });
 
         if (items.length === 0) {
-            alert("Please add at least one item with a valid sell price.");
+            alert("Please add at least one item with a valid price.");
             return;
         }
 
@@ -488,6 +619,9 @@
             serialNo: currentSerialNo,
             timestamp: editingId ? salesData.find(s => s.id === editingId).timestamp : new Date().toISOString(),
             customerName,
+            billNo,
+            paymentMode,
+            carryBag,
             items,
             total,
             totalCost,
@@ -512,25 +646,39 @@
         if (!sale) return;
 
         document.getElementById('customerName').value = sale.customerName;
+        document.getElementById('billNo').value = sale.billNo || getTodayBillPrefix();
+        document.getElementById('paymentMode').value = sale.paymentMode || 'Cash';
+        document.getElementById('carryBag').value = sale.carryBag || 'Paper Pouch';
+
         document.getElementById('itemsContainer').innerHTML = '';
         
         sale.items.forEach(item => {
-            addItemRow(item.category, item.subCategory || '', item.note || '', item.buyPrice || '', item.price, item.vendor || 'NA');
+            addItemRow(
+                item.category, 
+                item.subCategory || '', 
+                item.price, 
+                item.buyPrice || '', 
+                item.vendor || 'Self', 
+                item.note || '', 
+                item.packaging || 'Packet'
+            );
         });
 
         editingId = id;
         document.getElementById('formTitle').textContent = `Edit Sale Entry #${sale.serialNo || 'Old'}`;
         document.getElementById('saveBtn').textContent = "Update Sale";
         document.getElementById('cancelEditBtn').style.display = "inline-block";
+        document.getElementById('deleteEntryBtn').style.display = "inline-block";
         
         document.querySelector('.left-panel').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function deleteSale(id) {
+    function deleteCurrentSale() {
+        if (!editingId) return;
         if(confirm("Are you sure you want to delete this entry?")) {
-            salesData = salesData.filter(s => s.id !== id);
+            salesData = salesData.filter(s => s.id !== editingId);
             localStorage.setItem('salesData', JSON.stringify(salesData));
-            if(editingId === id) clearForm();
+            clearForm();
             renderTable();
             calculateTodaySale();
         }
@@ -555,30 +703,28 @@
 
         salesData.forEach(sale => {
             const dateObj = new Date(sale.timestamp);
-            const dateStr = dateObj.toLocaleDateString([], {month:'short', day:'numeric'}) + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dateStr = dateObj.toLocaleDateString([], {month:'short', day:'numeric'}) + '<br><span style="font-size:0.65rem; color:var(--text-muted);">' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + '</span>';
             const serialDisplay = sale.serialNo ? sale.serialNo : '-';
 
-            // Calculate or extract record totals
             let saleTotal = sale.total || 0;
-            let saleProfit = sale.totalProfit;
-            if (saleProfit === undefined) {
-                saleProfit = sale.items.reduce((acc, item) => acc + (item.price - (item.buyPrice || 0)), 0);
-            }
+            let saleProfit = sale.totalProfit !== undefined ? sale.totalProfit : sale.items.reduce((acc, item) => acc + (item.price - (item.buyPrice || 0)), 0);
 
             let itemsHTML = '<ul class="item-list">';
             sale.items.forEach(item => {
                 const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
-                const noteStr = item.note ? `<span class="desc-text">(${item.note})</span>` : '';
-                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'NA'}</span>`;
+                const noteStr = item.note ? `<span class="desc-text" style="margin-left: 4px;">(${item.note})</span>` : '';
+                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
                 const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
                 const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
                 const itemProfit = item.price - (item.buyPrice || 0);
                 const profitTag = `<span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736;">Profit: ₹${itemProfit.toFixed(2)}</span>`;
+                const packTag = item.packaging ? `<span class="desc-text" style="margin-left: 4px;">[📦 ${item.packaging}]</span>` : '';
 
-                itemsHTML += `<li style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dotted var(--border-color); display: flex; flex-direction: column; gap: 3px;">
+                itemsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted var(--border-color); display: flex; flex-direction: column; gap: 4px;">
                     <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                         <span class="info-box info-cat">${catString}</span>
                         ${vendorTag}
+                        ${packTag}
                         ${noteStr}
                     </div>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
@@ -593,15 +739,22 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><span class="info-box info-sno">#${serialDisplay}</span></td>
-                <td><span class="info-box info-date">${dateStr}</span></td>
-                <td style="font-weight: 700; font-size: 0.8rem;">${sale.customerName}</td>
+                <td><span class="info-date" style="padding: 2px 4px; border-radius:3px;">${dateStr}</span></td>
+                <td>
+                    <!-- Refined layout for Customer Name and small Edit icon -->
+                    <div style="display:flex; align-items:center; gap: 6px;">
+                        <strong style="font-size: 0.85rem;">${sale.customerName}</strong>
+                        <button type="button" class="icon-btn" title="Edit Sale" onclick="editSale(${sale.id})" style="font-size: 0.65rem; padding: 2px; color: var(--accent-blue);">✏️</button>
+                    </div>
+                    <div class="desc-text" style="margin-top: 4px; line-height: 1.5;">
+                        <span style="font-weight: 600; color: var(--text-main);">Bill No:</span> ${sale.billNo || '-'}<br>
+                        <span style="font-weight: 600; color: var(--text-main);">Payment:</span> ${sale.paymentMode || 'N/A'}<br>
+                        <span style="font-weight: 600; color: var(--text-main);">Carry Bag:</span> ${sale.carryBag || '-'}
+                    </div>
+                </td>
                 <td>${itemsHTML}</td>
                 <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${saleTotal.toFixed(2)}</span></td>
                 <td><span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736; font-size: 0.8rem;">₹${saleProfit.toFixed(2)}</span></td>
-                <td>
-                    <button type="button" onclick="editSale(${sale.id})" style="margin-bottom: 4px;">Edit</button><br>
-                    <button type="button" class="danger" onclick="deleteSale(${sale.id})">Del</button>
-                </td>
             `;
             tbody.appendChild(tr);
         });
@@ -651,13 +804,16 @@
             return;
         }
 
-        let csvContent = "S.No.,Date,Time,Customer Name,Item Category,Item Type,Vendor,Buy Price,Sell Price,Profit,Extra Note,Sale Total,Sale Profit\n";
+        let csvContent = "S.No.,Date,Time,Customer Name,Bill No,Payment Mode,Carry Bag,Item Category,Item Type,Item Packaging,Vendor,Buy Price,Sell Price,Profit,Extra Note,Sale Total,Sale Profit\n";
 
         salesData.forEach(sale => {
             const dateObj = new Date(sale.timestamp);
             const date = dateObj.toLocaleDateString();
             const time = dateObj.toLocaleTimeString();
             const customer = `"${sale.customerName.replace(/"/g, '""')}"`;
+            const billNo = `"${(sale.billNo || '').replace(/"/g, '""')}"`;
+            const paymentMode = `"${(sale.paymentMode || '').replace(/"/g, '""')}"`;
+            const carryBag = `"${(sale.carryBag || '').replace(/"/g, '""')}"`;
             const sno = sale.serialNo || '';
             const total = sale.total.toFixed(2);
             const saleProfit = (sale.totalProfit !== undefined ? sale.totalProfit : sale.items.reduce((acc, i) => acc + (i.price - (i.buyPrice || 0)), 0)).toFixed(2);
@@ -665,7 +821,8 @@
             sale.items.forEach((item, index) => {
                 const subCatData = item.subCategory || '';
                 const noteData = item.note || '';
-                const itemVendor = `"${(item.vendor || 'NA').replace(/"/g, '""')}"`;
+                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
+                const packaging = `"${(item.packaging || 'Packet').replace(/"/g, '""')}"`;
 
                 const cat = item.category;
                 const type = `"${subCatData.replace(/"/g, '""')}"`;
@@ -677,7 +834,7 @@
                 const displayTotal = (index === sale.items.length - 1) ? total : "";
                 const displaySaleProfit = (index === sale.items.length - 1) ? saleProfit : "";
                 
-                csvContent += `${sno},${date},${time},${customer},${cat},${type},${itemVendor},${buyPrice},${sellPrice},${profit},${note},${displayTotal},${displaySaleProfit}\n`;
+                csvContent += `${sno},${date},${time},${customer},${billNo},${paymentMode},${carryBag},${cat},${type},${packaging},${itemVendor},${buyPrice},${sellPrice},${profit},${note},${displayTotal},${displaySaleProfit}\n`;
             });
         });
 

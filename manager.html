@@ -396,7 +396,7 @@
 
     function getTodayBillPrefix() {
     const d = new Date();
-    return `NA-${d.getDate()}${d.getMonth() + 1}-`;
+    return `${d.getDate()}${d.getMonth() + 1}-`-NA;
 }
     function toggleDarkMode() {
         const body = document.body;

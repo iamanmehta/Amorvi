@@ -360,8 +360,8 @@
         }
     }
 
-    function addItemRow(cat = '', subCat = '', note = '', buyPrice = '', sellPrice = '', vendor = 'Self') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; buyPrice = ''; sellPrice = ''; vendor = 'Self'; } 
+    function addItemRow(cat = '', subCat = '', note = '', buyPrice = '', sellPrice = '', vendor = 'NA') {
+        if (typeof cat === 'object') { cat = ''; subCat = ''; note = ''; buyPrice = ''; sellPrice = ''; vendor = 'NA'; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');
@@ -382,7 +382,7 @@
             <div class="form-group">
                 <label>Vendor</label>
                 <select class="item-vendor">
-                    <option value="Self" ${vendor === 'Self' ? 'selected' : ''}>Self</option>
+                    <option value="NA" ${vendor === 'NA' ? 'selected' : ''}>NA</option>
                     <option value="NA">NA</option>
                         <option value="Bhagvat Imitation">Bhagvat Imitation</option>
                         <option value="Inayat Fashions">Inayat Fashions</option>
@@ -514,7 +514,7 @@
         document.getElementById('itemsContainer').innerHTML = '';
         
         sale.items.forEach(item => {
-            addItemRow(item.category, item.subCategory || '', item.note || '', item.buyPrice || '', item.price, item.vendor || 'Self');
+            addItemRow(item.category, item.subCategory || '', item.note || '', item.buyPrice || '', item.price, item.vendor || 'NA');
         });
 
         editingId = id;
@@ -568,7 +568,7 @@
             sale.items.forEach(item => {
                 const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
                 const noteStr = item.note ? `<span class="desc-text">(${item.note})</span>` : '';
-                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
+                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'NA'}</span>`;
                 const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
                 const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
                 const itemProfit = item.price - (item.buyPrice || 0);
@@ -664,7 +664,7 @@
             sale.items.forEach((item, index) => {
                 const subCatData = item.subCategory || '';
                 const noteData = item.note || '';
-                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
+                const itemVendor = `"${(item.vendor || 'NA').replace(/"/g, '""')}"`;
 
                 const cat = item.category;
                 const type = `"${subCatData.replace(/"/g, '""')}"`;

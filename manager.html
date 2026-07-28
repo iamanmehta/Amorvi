@@ -474,8 +474,8 @@
         }
     }
 
-    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = 'Self', note = '', packaging = 'Packet') {
-        if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = 'Self'; note = ''; packaging = 'Packet'; } 
+    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = '', note = '', packaging = '') {
+    if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = ''; note = ''; packaging = ''; } 
 
         const container = document.getElementById('itemsContainer');
         const rowDiv = document.createElement('div');

@@ -216,7 +216,7 @@
             color: var(--accent-blue); 
             font-size: 0.95rem;
         }
-        [data-theme="dark"] .godline-text { color: #409cff; }
+        [data-theme="dark"] .godline-text { color: #000000; }
 
     </style>
 </head>
@@ -259,7 +259,7 @@
                 
                 <div class="form-group">
                     <label>Customer Name</label>
-                    <input type="text" id="customerName" placeholder="Leave blank for Auto-Serial" autocomplete="off" autofocus>
+                    <input type="text" id="customerName" placeholder="Customer #" autocomplete="off" autofocus>
                 </div>
                 
                 <!-- Item Details moved up -->
@@ -307,7 +307,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 10px; text-align: right;">
-                    <button type="button" class="danger" id="deleteEntryBtn" onclick="deleteCurrentSale()" style="display: none; width: 100%;">Delete this entry</button>
+                    <button type="button" class="danger" id="deleteEntryBtn" onclick="deleteCurrentSale()" style="display: none; width: 100%;">Delete Sale</button>
                 </div>
             </div>
         </div>
@@ -327,7 +327,7 @@
                 <!-- Symmetric Header Buttons -->
                 <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 1;">
                     <button type="button" class="danger" onclick="clearAllData()">Clear All Data</button>
-                    <button type="button" onclick="exportToExcel()">Export (Excel)</button>
+                    <button type="button" onclick="exportToExcel()">Export</button>
                 </div>
             </div>
             <table>
@@ -499,7 +499,7 @@
                 </div>
                 <div class="form-group">
                     <label>Buy Price (₹)</label>
-                    <input type="number" class="item-buy-price" placeholder="0" step="10">
+                    <input type="number" class="item-buy-price" placeholder="499" step="10">
                 </div>
             </div>
 
@@ -541,7 +541,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="display: flex; align-items: flex-end; justify-content: flex-end;">
-                    <button type="button" class="danger" style="font-size: 0.65rem; padding: 6px 10px;" onclick="this.closest('.item-row').remove()">- Remove Item</button>
+                    <button type="button" class="danger" style="font-size: 0.65rem; padding: 6px 10px;" onclick="this.closest('.item-row').remove()">Remove Item</button>
                 </div>
             </div>
         `;

@@ -3,879 +3,1010 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Tracker</title>
+    <title>Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Light Mode */
-            --page-bg: #b3b3b8;
-            --bg-color: #f0f0f2;
+            --app-bg: #e5e5ea;
             --card-bg: #ffffff;
             --text-main: #000000;
-            --text-muted: #3a3a3c;
-            --border-color: #c6c6c8;
-            --accent-blue: #0071e3;
-            --accent-blue-hover: #0077ed;
+            --text-muted: #6e6e73;
+            --border: #c6c6c8;
+            --primary: #007aff;
             --danger: #ff3b30;
-            --shadow: 0 4px 6px rgba(0,0,0,0.06), 0 10px 30px rgba(0,0,0,0.15);
-            --radius: 8px;
-            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --success: #34c759;
+            --badge-grey: #f2f2f7;
+            --badge-grey-text: #1c1c1e;
+            --badge-blue: #007aff15;
+            --badge-blue-text: #0056b3;
+            --badge-red: #ff3b3015;
+            --badge-red-text: #c01910;
+            --badge-green: #34c75915;
+            --badge-green-text: #20873a;
+            --badge-yellow: #ffcc0025;
+            --badge-yellow-text: #8a6d00;
         }
 
         [data-theme="dark"] {
-            /* Dark Mode */
-            --page-bg: #000000;
-            --bg-color: #151516;
+            --app-bg: #000000;
             --card-bg: #1c1c1e;
             --text-main: #ffffff;
-            --text-muted: #d1d1d6;
-            --border-color: #38383a;
-            --accent-blue: #0a84ff;
-            --accent-blue-hover: #409cff;
-            --danger: #ff453a;
-            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --text-muted: #98989d;
+            --border: #38383a;
+            --badge-grey: #2c2c2e;
+            --badge-grey-text: #ffffff;
+            --badge-blue: #0a84ff25;
+            --badge-blue-text: #5e9cff;
+            --badge-red: #ff453a25;
+            --badge-red-text: #ff6b62;
+            --badge-green: #32d74b25;
+            --badge-green-text: #59f06f;
+            --badge-yellow: #ffd60a25;
+            --badge-yellow-text: #ffdf40;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-stack); }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
         body {
-            background-color: var(--page-bg);
+            background-color: var(--app-bg);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
             height: 100vh;
-            overflow: hidden;
-            padding: 15px;
-            transition: background-color 0.3s;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 1450px;
-            height: 95vh;
-            background-color: var(--bg-color);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 15px;
             display: flex;
             flex-direction: column;
-            transition: background-color 0.3s;
+            overflow: hidden;
+            transition: background-color 0.2s, color 0.2s;
         }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-
-        .info-box {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+        svg {
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            width: 14px;
+            height: 14px;
         }
-        
-        .info-sno { background-color: rgba(142, 142, 147, 0.15); color: var(--text-main); margin-right: 5px; }
-        .info-cat { background-color: rgba(0, 113, 227, 0.12); color: var(--accent-blue); }
-        .info-date { background-color: rgba(142, 142, 147, 0.12); color: var(--text-muted); }
-        .info-amount { background-color: rgba(52, 199, 89, 0.12); color: #208736; font-size: 0.7rem; }
-        [data-theme="dark"] .info-amount { color: #32d74b; background-color: rgba(52, 199, 89, 0.18); }
 
-        /* Top Header Navigation */
-        .top-bar {
+        /* Top Bar */
+        .topbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 6px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--card-bg);
-            padding: 8px 12px;
-            border-radius: var(--radius);
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
+            height: 40px;
             flex-shrink: 0;
-            gap: 10px;
-            transition: background-color 0.3s;
         }
 
-        .top-left { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .metric-box { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; color: var(--text-main); }
-        .top-right { display: flex; align-items: center; gap: 10px; }
-        
-        .time-display { font-weight: 600; font-size: 0.75rem; color: var(--text-muted); }
+        .topbar-left {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
 
-        button {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
+        .stat-badge {
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .stat-total { background-color: var(--badge-blue); color: var(--badge-blue-text); border: 1px solid #007aff30;}
+        .stat-profit { background-color: var(--badge-green); color: var(--badge-green-text); border: 1px solid #34c75930; }
+        .stat-cost { background-color: var(--badge-red); color: var(--badge-red-text); border: 1px solid #ff3b3030;}
+        .stat-cust { background-color: var(--badge-yellow); color: var(--badge-yellow-text); border: 1px solid #ffcc0040;}
+
+        .topbar-mid {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        #godline-input {
+            background: transparent;
+            border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 5px;
+            padding: 2px 5px;
+            font-weight: 700;
+            font-size: 12px;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+            width: 180px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .clock {
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 11px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
             cursor: pointer;
-            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover { background-color: var(--badge-grey); color: var(--text-main); }
+        .icon-btn.active { color: var(--primary); background-color: var(--badge-blue); }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            width: 28%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        h2, h3 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            letter-spacing: 0.2px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .row > * {
+            flex: 1;
+            min-width: 0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 5px 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            font-size: 11px;
             font-weight: 600;
-            transition: background-color 0.2s;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] { -moz-appearance: textfield; }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%236e6e73" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 2px center;
+            background-size: 14px;
+            padding-right: 18px;
+        }
+        
+        select option {
+            color: #000000;
+            background-color: #ffffff;
+            font-weight: 600;
+        }
+        [data-theme="dark"] select option {
+            color: #ffffff;
+            background-color: #1c1c1e;
+        }
+
+        input:focus, select:focus { border-color: var(--primary); }
+        input::placeholder { color: var(--text-muted); font-weight: 500; }
+        .placeholder-active { color: var(--text-muted); }
+
+        .item-entry {
+            background-color: var(--badge-grey);
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .item-header-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .remove-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--danger);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            height: 28px;
         }
-        button:hover { background-color: var(--page-bg); }
-        button.primary { background-color: var(--accent-blue); color: white; border: none; }
-        button.primary:hover { background-color: var(--accent-blue-hover); }
-        button.danger { background-color: transparent; color: var(--danger); border-color: var(--danger); }
-        button.danger:hover { background-color: rgba(255,59,48,0.1); }
-        
-        .icon-btn { font-size: 1rem; padding: 4px; border: none; background: transparent; display: inline-flex; align-items: center; justify-content: center; height: auto; }
-        .icon-btn:hover { background: transparent; transform: scale(1.1); }
+        .remove-item svg { width: 10px; height: 10px; stroke-width: 3; }
 
-        .main-content {
-            display: flex;
-            gap: 15px;
-            flex-grow: 1;
-            min-height: 0;
-        }
-
-        .left-panel {
-            width: 380px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .right-panel {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            background-color: var(--card-bg);
-            transition: background-color 0.3s;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
-            transition: background-color 0.3s;
-        }
-        
-        .card-header {
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 700;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-outline { background-color: transparent; border: 1px dashed var(--primary); color: var(--primary); }
+        .btn-primary { background-color: var(--primary); color: white; margin-top: 10px; }
+        .btn-danger { background-color: var(--danger); color: white; margin-top: 6px; display: none; }
+
+        /* Right Panel */
+        .right-panel {
+            width: 72%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: var(--badge-grey);
         }
 
-        .form-group { margin-bottom: 8px; width: 100%; }
-        label { display: block; margin-bottom: 3px; color: var(--text-muted); font-weight: 600; font-size: 0.65rem; }
-        input, select {
-            width: 100%; padding: 7px 9px; border: 1px solid var(--border-color);
-            border-radius: 5px; background-color: var(--bg-color); color: var(--text-main);
-            font-size: 0.75rem; font-weight: 500; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input:focus, select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2); }
-        input::placeholder { color: #8e8e93; font-weight: 400; }
-
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-
-        .item-row {
+        .table-actions {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed var(--border-color);
-            background-color: var(--bg-color);
-            padding: 10px;
-            border-radius: var(--radius);
+            gap: 6px;
         }
-        
-        .form-actions { display: flex; justify-content: space-between; margin-top: 15px; flex-wrap: wrap; gap: 8px; }
-        
-        /* Table Styles */
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); font-size: 0.75rem; font-weight: 500; vertical-align: top; }
-        th { color: var(--text-muted); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; background-color: var(--bg-color); position: sticky; top: 0; z-index: 1;}
-        .item-list { list-style: none; }
-        .desc-text { color: var(--text-muted); font-size: 0.7rem; font-weight: 500; }
 
-        /* Godline Input */
-        .godline-text { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            font-style: normal; 
-            font-weight: 700; 
-            color: var(--accent-blue); 
-            font-size: 0.95rem;
+        .btn-export { background-color: var(--success); color: white; width: auto;}
+        .btn-wipe { background-color: var(--danger); color: white; width: auto; opacity: 0.4; cursor: not-allowed; }
+        .btn-wipe.enabled { opacity: 1; cursor: pointer; }
+
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
         }
-        [data-theme="dark"] .godline-text { color: #000000; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 10px;
+            padding: 6px 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .row-edit-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            display: none;
+            padding: 0;
+            margin-left: 4px;
+        }
+        
+        .edit-mode-on .row-edit-btn { display: inline-flex; align-items: center; }
+        .edit-mode-on .godline-edit { display: inline-flex !important; }
+        .edit-mode-on #godline-text { cursor: pointer; text-decoration: underline dotted; }
+
+        .td-customer { line-height: 1.4; }
+        .cust-name { font-weight: 700; font-size: 12px; color: var(--text-main); display: flex; align-items: center; }
+        .cust-details { color: var(--text-muted); font-size: 10px; }
+
+        .summary-badge-line {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 3px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .sm-badge {
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .lg-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            border: 1px solid transparent;
+        }
+        
+        .bg-grey { background-color: var(--badge-grey); color: var(--badge-grey-text); border-color: var(--border); }
+        .bg-blue { background-color: var(--badge-blue); color: var(--badge-blue-text); border-color: #007aff30; }
+        .bg-red { background-color: var(--badge-red); color: var(--badge-red-text); border-color: #ff3b3030; }
+        .bg-green { background-color: var(--badge-green); color: var(--badge-green-text); border-color: #34c75930; }
+
+        .item-num-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--badge-grey);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .item-summary-block {
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed var(--border);
+        }
+        .item-summary-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
     </style>
 </head>
 <body>
 
-<div class="app-container">
     <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-left">
-            <div class="metric-box">
-                Sale: <span id="todayTotalValue" class="info-box info-amount">₹0.00</span>
-                <button type="button" id="toggleSaleBtn" onclick="toggleTodaySale()" style="padding: 2px 6px; font-size: 0.65rem; height: auto;">Hide</button>
-            </div>
-            <div class="metric-box">
-                Profit: <span id="todayProfitValue" class="info-box" style="background-color: rgba(52, 199, 89, 0.12); color: #208736;">₹0.00</span>
-            </div>
-            <div class="metric-box">
-                Cost: <span id="todayCostValue" class="info-box" style="background-color: rgba(255, 149, 0, 0.12); color: #b25000;">₹0.00</span>
-            </div>
-            <div class="metric-box">
-                Customers: <span id="todayCustomerCount" class="info-box info-sno" style="margin-left: 4px;">0</span>
-            </div>
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="stat-badge stat-total">Total: <span id="val-total">0</span></div>
+            <div class="stat-badge stat-profit">Profit: <span id="val-profit">0</span></div>
+            <div class="stat-badge stat-cost">Cost: <span id="val-cost">0</span></div>
+            <div class="stat-badge stat-cust">Customers: <span id="val-cust">0</span></div>
+        </div>
+        
+        <div class="topbar-mid">
+            <span id="godline-text">Welcome to Store</span>
+            <input type="text" id="godline-input">
+            <button class="icon-btn godline-edit" id="btn-edit-godline" style="display: none;" title="Edit Godline">
+                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
         </div>
 
-        <div class="top-right">
-            <span class="time-display" id="datetimeDisplay"></span>
-            <button type="button" class="icon-btn" onclick="toggleDarkMode()" id="themeIcon">🌙</button>
+        <div class="topbar-right">
+            <div class="brand-name">Amorvi</div>
+            <div class="clock" id="clock-display">00:00:00</div>
+            <button class="icon-btn" id="btn-hide" title="Hide Amounts">
+                <svg id="icon-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+            <button class="icon-btn" id="btn-edit-mode" title="Toggle Edit Mode">
+                <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </button>
+            <button class="icon-btn" id="btn-theme" title="Toggle Theme">
+                <svg id="icon-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </button>
         </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="main-content">
+    <!-- Main Content -->
+    <div class="main-container">
         
-        <!-- LEFT PANEL -->
+        <!-- Left Panel: Form -->
         <div class="left-panel">
-            <div class="card" style="padding-bottom: 5px;">
-                <div class="card-header">
-                    <span id="formTitle">New Sale Entry</span>
-                </div>
+            <h2 id="form-title">New Sale Entry</h2>
+            <form id="sale-form">
+                <input type="hidden" id="edit-id" value="">
                 
                 <div class="form-group">
-                    <label>Customer Name</label>
-                    <input type="text" id="customerName" placeholder="Customer #" autocomplete="off" autofocus>
-                </div>
-                
-                <!-- Item Details moved up -->
-                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Item Details</div>
-
-                <div id="itemsContainer">
-                    <!-- Item rows injected here -->
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                    <button type="button" onclick="addItemRow()">+ Add Item</button>
-                </div>
-
-                <!-- Experience Details moved down -->
-                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin: 15px 0 8px 0;">Experience Details</div>
-
-                <div class="form-grid-2">
-                    <div class="form-group">
-                        <label>Bill No.</label>
-                        <input type="text" id="billNo">
+                    <div class="row">
+                        <input type="text" id="cust-name" placeholder="Customer Name">
+                        <input type="text" id="bill-no" placeholder="Bill No." required>
                     </div>
-                    <div class="form-group">
-                        <label>Payment Mode</label>
-                        <select id="paymentMode">
-                            <option value="" disabled selected hidden>Choose payment mode</option>
+                    <div class="row">
+                        <select id="payment-mode" class="placeholder-active" onchange="this.classList.remove('placeholder-active')">
+                            <option value="" hidden selected>Choose payment mode</option>
                             <option value="Cash">Cash</option>
                             <option value="Card">Card</option>
                             <option value="UPI">UPI</option>
                         </select>
+                        <input type="number" step="any" id="discount-total" placeholder="Discount (Total)">
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
-                    <label>Carry Bag</label>
-                    <select id="carryBag">
-                        <option value="" disabled selected hidden>Choose carry bag</option>
-                         <option value="None">None</option>
-                        <option value="Paper Pouch">Paper Pouch</option>
-                        <option value="Stamped Carry bag">Stamped Carry bag</option>
-                        <option value="Branded Carry bag">Branded Carry bag</option>
-                    </select>
-                </div>
-
-                <div class="form-actions" style="margin-top: 10px;">
-                    <div style="display: flex; gap: 6px; width: 100%; justify-content: flex-end;">
-                        <button type="button" id="cancelEditBtn" onclick="clearForm()" style="display: none;">Cancel</button>
-                        <button type="button" class="primary" id="saveBtn" onclick="saveSale()" style="flex: 1;">Add Sale</button>
-                    </div>
-                </div>
-                <div style="margin-top: 10px; text-align: right;">
-                    <button type="button" class="danger" id="deleteEntryBtn" onclick="deleteCurrentSale()" style="display: none; width: 100%;">Delete Sale</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT PANEL -->
-        <div class="right-panel">
-            <div class="card-header" style="padding: 12px; margin-bottom: 0; border: none; background: var(--card-bg); position: sticky; top: 0; z-index: 2; display: flex; align-items: center;">
-                <div style="flex: 1;">
-                    <span>Sales Records</span>
+                <h3 style="margin-top: 6px;">Items</h3>
+                <div id="items-container">
+                    <!-- Dynamic item entries -->
                 </div>
                 
-                <!-- Godline Section -->
-                <div id="godlineContainer" style="flex: 2; text-align: center; display: flex; justify-content: center; align-items: center; gap: 5px;">
-                    <!-- Injected via JS -->
-                </div>
-
-                <!-- Symmetric Header Buttons -->
-                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 1;">
-                    <button type="button" class="danger" onclick="clearAllData()">Wipe Data</button>
-                    <button type="button" onclick="exportToExcel()">Close Sale</button>
-                </div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 50px;">#</th>
-                        <th style="width: 100px;">Date & Time</th>
-                        <th style="width: 220px;">Customer Details</th>
-                        <th>Items Summary</th>
-                        <th style="width: 90px;">Total Sale</th>
-                        <th style="width: 90px;">Total Profit</th>
-                    </tr>
-                </thead>
-                <tbody id="salesTableBody">
-                    <!-- Rows injected here -->
-                </tbody>
-            </table>
+                <button type="button" class="btn btn-outline" id="btn-add-item">Add Item +</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit-sale">Add Sale</button>
+                <button type="button" class="btn btn-danger" id="btn-delete-sale">Delete this Sale</button>
+            </form>
         </div>
 
+        <!-- Right Panel: Table -->
+        <div class="right-panel">
+            <div class="table-header">
+                <h3 style="margin:0;">Sales Data</h3>
+                <div class="table-actions">
+                    <button class="btn btn-export" id="btn-export">Close Sale (0)</button>
+                    <button class="btn btn-wipe" id="btn-wipe" disabled>Wipe Data</button>
+                </div>
+            </div>
+            
+            <div class="table-container" id="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="5%">Sr.</th>
+                            <th width="15%">Timestamp</th>
+                            <th width="20%">Customer Details</th>
+                            <th width="45%">Items Summary</th>
+                            <th width="15%">Total Sale</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-tbody">
+                        <!-- Dynamic sales rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 
 <script>
-    let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
-    let editingId = null;
-    let saleVisible = true;
-    let godlineText = localStorage.getItem('godline') || "AMORVI *** Waiting for Input";
+const catSubcatMap = {
+    "Ring": ["Anti Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold -White Stone", "Gold -Red Stone", "Gold -Cocktail", "Gold -Plain"],
+    "Pendant": ["Anti-Tarnish", "AD"],
+    "Bracelet": ["Anti-Tarnish", "AD", "Anti-Tarnish Chained", "AD Chained"],
+    "Earring": ["Korean", "Anti-tarnish", "Hoops", "AD Earrings", "Anti-Tarnish Studs", "General Studs", "AD Studs" ,"Gold Studs", "Indo-Western", "Partywear", "Funky"],
+    "Chain": ["AT Sleek Snake", "AT Snake", "AT Balls", "Silver", "Micro-Gold 18 Inch 1L" ,"Micro-Gold 18 Inch 2L" ,"Micro-Gold 24 Inch 2L", "Micro-Gold 24 Inch 3L" ,"Men's"],
+    "Set": ["Anti-Tarnish", "AD One", "AD 2 Layer", "AD 3 layer", "AD Heavy", "AD choker" ,"Indian Kundan/Polki Stone cut (Small)" ,"Indian Kundan/Polki Stone cut (Big)"],
+    "Necklace": ["Anti-Tarnish", "AD"]
+};
 
-    const subCategories = {
-        "RING": ["Anti Tarnish", "Korean", "AD-Cocktail", "AD-Medium", "AD-Small", "Gold -White Stone", "Gold -Red Stone", "Gold -Cocktail", "Gold -Plain"],
-        "Pendant": ["Anti-Tarnish", "AD"],
-        "Bracelet": ["Anti-Tarnish", "AD", "Anti-Tarnish Chained", "AD Chained"],
-        "Earring": ["Korean", "Anti-tarnish", "Hoops", "AD Earrings", "Anti-Tarnish Studs", "General Studs", "AD studs","Gold Studs", "Indo-Western", "Partywear", "Funky"],
-        "Chain": ["AT Sleek Snake", "AT Snake", "AT Balls", "Silver", "Micro-Gold 18 Inch 1L" ,"Micro-Gold 18 Inch 2L" ,"Micro-Gold 24 Inch 2L", "Micro-Gold 24 Inch 3L" ,"Men's"],
-        "Set": ["Anti-Tarnish", "AD One", "AD 2 Layer", "AD 3 layer", "AD Heavy", "AD choker" ,"Indian Kundan/Polki Stone cut (Small)" ,"Indian Kundan/Polki Stone cut (Big)"],
-        "Necklace": ["Anti-Tarnish", "AD"]
-    };
-    
-    const categoriesList = Object.keys(subCategories);
+const vendorOptions = [
+    "NA", "Bhagvat Imitation", "Inayat Fashions", "Singh Fashion Emproium", 
+    "VM Jewellers", "VK Fashion Mart", "A-One AD", "Maa Vaishno Jewellers", 
+    "Shree Shyam Jewellers", "Minari Mumbai", "Aggarwal Novelties", "Neenox/Lezara NX"
+];
 
-    window.onload = () => {
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('themeIcon').textContent = '☀️';
-        }
+const packagingOptions = ["3x3 Box", "4x4 Box", "5x6 Box", "Packet Packaging"];
 
-        renderGodline();
-        document.getElementById('billNo').value = getTodayBillPrefix();
-        addItemRow(); 
-        renderTable();
-        calculateTodaySale();
-        document.getElementById('customerName').focus();
-    };
+let sales = JSON.parse(localStorage.getItem('jewelrySalesData')) || [];
+let godline = localStorage.getItem('jewelryGodline') || "Welcome to Store";
+let theme = localStorage.getItem('jewelryTheme') || "light";
+let editMode = false;
+let hiddenMode = false;
+let isExported = false; 
 
-    function updateDateTime() {
-        const now = new Date();
-        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        document.getElementById('datetimeDisplay').textContent = now.toLocaleDateString('en-US', options);
-    }
+const formatCurrency = (amount) => `₹${Number(amount).toLocaleString('en-IN')}`;
 
-    function getTodayBillPrefix() {
+const getBillPrefix = () => {
     const d = new Date();
-    return `${d.getDate()}${d.getMonth() + 1}-`;
-}
-    function toggleDarkMode() {
-        const body = document.body;
-        const icon = document.getElementById('themeIcon');
-        
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            icon.textContent = '🌙';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            icon.textContent = '☀️';
+    const date = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = d.getFullYear().toString().slice(-2);
+    return `${date}${month}${year}-`;
+};
+
+const updateClock = () => {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    document.getElementById('clock-display').innerText = `${dateStr} | ${timeStr}`;
+};
+setInterval(updateClock, 1000);
+updateClock();
+
+const saveState = () => {
+    localStorage.setItem('jewelrySalesData', JSON.stringify(sales));
+    localStorage.setItem('jewelryGodline', godline);
+    localStorage.setItem('jewelryTheme', theme);
+    renderAll();
+};
+
+// SVG icons
+const iconSun = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+const iconMoon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+const iconEye = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+const iconEyeOff = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+const iconEdit = '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>';
+const iconSave = '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>';
+
+const applyTheme = () => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('icon-theme').innerHTML = theme === 'dark' ? iconMoon : iconSun;
+};
+
+// Keydown increment/decrement by 10
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'number') {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            let currentVal = parseFloat(e.target.value) || 0;
+            let increment = e.key === 'ArrowUp' ? 10 : -10;
+            e.target.value = currentVal + increment;
         }
     }
+});
 
-    function toggleTodaySale() {
-        saleVisible = !saleVisible;
-        calculateTodaySale();
-        document.getElementById('toggleSaleBtn').textContent = saleVisible ? "Hide" : "Show";
+// Auto Focus Next Field helper
+function focusNextField(currentEl) {
+    const form = document.getElementById('sale-form');
+    const focusables = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, button:not([type="button"])'))
+        .filter(el => el.offsetWidth > 0 && el.offsetHeight > 0 && getComputedStyle(el).visibility !== 'hidden');
+    const index = focusables.indexOf(currentEl);
+    if (index > -1 && index < focusables.length - 1) {
+        focusables[index + 1].focus();
     }
+}
 
-    /* --- Godline Logic --- */
-    function renderGodline() {
-        const container = document.getElementById('godlineContainer');
-        container.innerHTML = `
-            <span class="godline-text">${godlineText}</span>
-            <button type="button" class="icon-btn" onclick="editGodline()" title="Edit line" style="margin-left: 2px;">✏️</button>
-        `;
+// Auto shift focus on select change & enter press
+document.getElementById('sale-form').addEventListener('change', (e) => {
+    if (e.target.tagName === 'SELECT') {
+        focusNextField(e.target);
     }
+});
 
-    function editGodline() {
-        const container = document.getElementById('godlineContainer');
-        container.innerHTML = `
-            <input type="text" id="godlineInput" value="${godlineText}" style="width: 250px; padding: 4px 8px; text-align: center;">
-            <button type="button" class="primary" onclick="saveGodline()" style="padding: 4px 8px; font-size: 0.65rem;">Save</button>
-        `;
-        document.getElementById('godlineInput').focus();
-        document.getElementById('godlineInput').addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') saveGodline();
+document.getElementById('sale-form').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+        e.preventDefault();
+        focusNextField(e.target);
+    }
+});
+
+// Topbar Events
+document.getElementById('godline-text').innerText = godline;
+document.getElementById('godline-input').value = godline;
+
+document.getElementById('btn-theme').addEventListener('click', () => {
+    theme = theme === 'light' ? 'dark' : 'light';
+    applyTheme();
+    saveState();
+});
+
+document.getElementById('btn-hide').addEventListener('click', (e) => {
+    hiddenMode = !hiddenMode;
+    document.getElementById('icon-eye').innerHTML = hiddenMode ? iconEyeOff : iconEye;
+    renderStats();
+});
+
+document.getElementById('btn-edit-mode').addEventListener('click', (e) => {
+    editMode = !editMode;
+    e.currentTarget.classList.toggle('active', editMode);
+    document.body.classList.toggle('edit-mode-on', editMode);
+});
+
+// Godline Editing
+const godlineText = document.getElementById('godline-text');
+const godlineInput = document.getElementById('godline-input');
+const btnEditGodline = document.getElementById('btn-edit-godline');
+
+const toggleGodlineEdit = () => {
+    if (godlineText.style.display !== 'none') {
+        godlineText.style.display = 'none';
+        godlineInput.style.display = 'inline-block';
+        godlineInput.value = godline;
+        godlineInput.focus();
+        btnEditGodline.innerHTML = `<svg viewBox="0 0 24 24">${iconSave}</svg>`;
+    } else {
+        godline = godlineInput.value.trim() || "Welcome to Store";
+        godlineText.innerText = godline;
+        godlineText.style.display = 'inline-block';
+        godlineInput.style.display = 'none';
+        btnEditGodline.innerHTML = `<svg viewBox="0 0 24 24">${iconEdit}</svg>`;
+        saveState();
+    }
+};
+
+btnEditGodline.addEventListener('click', toggleGodlineEdit);
+godlineText.addEventListener('click', () => {
+    if (editMode) toggleGodlineEdit();
+});
+
+// Helper to refresh Item Numbers in Form
+const refreshFormItemNumbers = () => {
+    const entries = document.querySelectorAll('.item-entry');
+    entries.forEach((entry, index) => {
+        const label = entry.querySelector('.item-index-tag');
+        if (label) label.innerText = `Item ${index + 1}`;
+    });
+};
+
+const createItemEntryHTML = (data = null) => {
+    const isCatSelected = data && data.cat;
+    let catOptions = `<option value="" hidden selected>Choose Item</option>`;
+    Object.keys(catSubcatMap).forEach(cat => {
+        catOptions += `<option value="${cat}" ${data && data.cat === cat ? 'selected' : ''}>${cat}</option>`;
+    });
+
+    const isVenSelected = data && data.vendor && data.vendor !== 'NA';
+    let vendorHTML = `<option value="" hidden selected>Choose Vendor</option>`;
+    vendorOptions.forEach(v => {
+        vendorHTML += `<option value="${v}" ${data && data.vendor === v ? 'selected' : ''}>${v}</option>`;
+    });
+
+    const isPkgSelected = data && data.pkg && data.pkg !== 'NA';
+    let pkgHTML = `<option value="" hidden selected>Choose packaging</option>`;
+    packagingOptions.forEach(p => {
+        pkgHTML += `<option value="${p}" ${data && data.pkg === p ? 'selected' : ''}>${p}</option>`;
+    });
+
+    let subcatHTML = `<option value="" hidden selected>Choose Subcategory</option>`;
+    if (isCatSelected) {
+        catSubcatMap[data.cat].forEach(sub => {
+            subcatHTML += `<option value="${sub}" ${data.subcat === sub ? 'selected' : ''}>${sub}</option>`;
         });
     }
 
-    function saveGodline() {
-        const inputVal = document.getElementById('godlineInput').value.trim();
-        if(inputVal) {
-            godlineText = inputVal;
-            localStorage.setItem('godline', godlineText);
-        }
-        renderGodline();
-    }
-    /* --------------------- */
+    const div = document.createElement('div');
+    div.className = 'item-entry';
+    div.innerHTML = `
+        <div class="item-header-label">
+            <span class="item-index-tag">Item 1</span>
+            <button type="button" class="remove-item" title="Remove Item"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="row">
+            <select class="item-cat ${isCatSelected ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${catOptions}</select>
+            <select class="item-subcat ${data && data.subcat ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${subcatHTML}</select>
+        </div>
+        <div class="row">
+            <select class="item-vendor ${isVenSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${vendorHTML}</select>
+            <input type="number" step="any" class="item-buy" placeholder="Buy Price (109)" value="${data ? (data.buy === 'NA' ? '' : data.buy) : ''}">
+            <input type="number" step="any" class="item-sell" placeholder="Sell Price (449)" required value="${data ? data.sell : ''}">
+        </div>
+        <div class="row">
+            <select class="item-pkg ${isPkgSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${pkgHTML}</select>
+            <input type="text" class="item-note" placeholder="Note (Optional)" value="${data ? data.note : ''}">
+        </div>
+    `;
 
-    function updateSubcatUI(selectElement, selectedSub = '') {
-        const category = selectElement.value;
-        const descContainer = selectElement.closest('.item-row').querySelector('.desc-wrapper');
-        const options = subCategories[category];
-        
-        if (options && options.length > 0) {
-            let selectHTML = `<select class="item-subcat">`;
-            options.forEach(opt => {
-                selectHTML += `<option value="${opt}">${opt}</option>`;
+    const catSelect = div.querySelector('.item-cat');
+    const subcatSelect = div.querySelector('.item-subcat');
+    
+    catSelect.addEventListener('change', (e) => {
+        const cat = e.target.value;
+        subcatSelect.innerHTML = `<option value="" hidden selected>Choose Subcategory</option>`;
+        subcatSelect.classList.add('placeholder-active');
+        if(catSubcatMap[cat]) {
+            catSubcatMap[cat].forEach(sub => {
+                subcatSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
             });
-            selectHTML += `</select>`;
-            descContainer.innerHTML = selectHTML;
-            if (selectedSub) {
-                const subSelect = descContainer.querySelector('.item-subcat');
-                if([...subSelect.options].some(o => o.value === selectedSub)) {
-                    subSelect.value = selectedSub;
-                }
-            }
+        }
+    });
+
+    div.querySelector('.remove-item').addEventListener('click', () => {
+        if (document.querySelectorAll('.item-entry').length > 1) { 
+            div.remove(); 
+            refreshFormItemNumbers();
+        } else { 
+            alert('At least one item is required.'); 
+        }
+    });
+
+    return div;
+};
+
+const itemsContainer = document.getElementById('items-container');
+document.getElementById('btn-add-item').addEventListener('click', () => {
+    itemsContainer.appendChild(createItemEntryHTML());
+    refreshFormItemNumbers();
+});
+
+const resetForm = () => {
+    document.getElementById('sale-form').reset();
+    document.getElementById('edit-id').value = '';
+    document.getElementById('bill-no').value = getBillPrefix();
+    
+    document.querySelectorAll('select').forEach(s => s.classList.add('placeholder-active'));
+    
+    itemsContainer.innerHTML = '';
+    itemsContainer.appendChild(createItemEntryHTML());
+    refreshFormItemNumbers();
+
+    document.getElementById('btn-submit-sale').innerText = 'Add Sale';
+    document.getElementById('btn-delete-sale').style.display = 'none';
+    document.getElementById('form-title').innerText = 'New Sale Entry';
+    document.querySelectorAll('input, select').forEach(el => el.style.borderColor = 'var(--border)');
+};
+
+document.getElementById('sale-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    let isValid = true;
+    
+    document.querySelectorAll('.item-cat, .item-subcat, .item-sell').forEach(el => {
+        if (!el.value || el.value.trim() === '') {
+            el.style.borderColor = 'var(--danger)';
+            isValid = false;
         } else {
-            descContainer.innerHTML = `<input type="text" class="item-subcat" placeholder="Enter type..." value="${selectedSub}">`;
+            el.style.borderColor = 'var(--border)';
         }
-    }
+    });
 
-    function addItemRow(cat = '', subCat = '', sellPrice = '', buyPrice = '', vendor = '', note = '', packaging = '') {
-    if (typeof cat === 'object') { cat = ''; subCat = ''; sellPrice = ''; buyPrice = ''; vendor = ''; note = ''; packaging = ''; } 
+    if (!isValid) return;
 
-        const container = document.getElementById('itemsContainer');
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'item-row';
-
-        const defaultCat = cat || categoriesList[0];
-
-        let selectHTML = `<select class="item-category" onchange="updateSubcatUI(this)">`;
-        categoriesList.forEach(c => {
-            selectHTML += `<option value="${c}">${c}</option>`;
-        });
-        selectHTML += `</select>`;
-
-        rowDiv.innerHTML = `
-            <div class="form-grid-2">
-                <div class="form-group"><label>Item Category</label>${selectHTML}</div>
-                <div class="form-group"><label>Type</label><div class="desc-wrapper"></div></div>
-            </div>
-            
-            <div class="form-grid-2">
-                <div class="form-group">
-                    <label>Sell Price (₹)</label>
-                    <input type="number" class="item-price" placeholder="449" step="10">
-                </div>
-                <div class="form-group">
-                    <label>Buy Price (₹)</label>
-                    <input type="number" class="item-buy-price" placeholder="60" step="10">
-                </div>
-            </div>
-
-            <div class="form-grid-2">
-                <div class="form-group">
-                    <label>Vendor</label>
-                    <select class="item-vendor">
-                        <option value="" disabled selected hidden>Choose Vendor</option>
-                        <option value="Bhagvat Imitation">Bhagvat Imitation</option>
-                        <option value="Bhagvat Imitation">Joostel Mumbai</option>
-                        <option value="Inayat Fashions">Inayat Fashions</option>
-                        <option value="Singh Emporium">Singh Emproium</option>
-                        <option value="VM Jewellers">VM Jewellers</option>
-                        <option value="VK Fashion">VK Fashion</option>
-                        <option value="A-One AD">A-One AD</option>
-                        <option value="MV">MV</option>
-                        <option value="SS Jewellers">SS Jewellers</option>
-                        <option value="Minari Mumbai">Minari Mumbai</option>
-                        <option value="Aggarwal Novelties">Aggarwal Novelties</option>
-                        <option value="NeenoxLezara NX">Neenox/Lezara NX</option>
-
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Note</label>
-                    <input type="text" class="item-note" placeholder="Extra details...">
-                </div>
-            </div>
-            
-            <div class="form-grid-2">
-                <div class="form-group">
-                    <label>Packaging</label>
-                    <select class="item-packaging">
-                    <option value="" disabled selected hidden>Choose packaging</option>
-                        <option value="None">None</option>
-                        <option value="Packet">Packet</option>
-                        <option value="Packet with card">Packet with card</option>
-                        <option value="Zipper">Zipper</option>
-                        <option value="3x3 Box">3x3 Box</option>
-                        <option value="4x4 Box">4x4 Box</option>
-                        <option value="5x6 Box">5x6 Box</option>
-                    </select>
-                </div>
-                <div class="form-group" style="display: flex; align-items: flex-end; justify-content: flex-end;">
-                    <button type="button" class="danger" style="font-size: 0.65rem; padding: 6px 10px;" onclick="this.closest('.item-row').remove()">Remove Item</button>
-                </div>
-            </div>
-        `;
-        
-        container.appendChild(rowDiv);
-
-        if (cat) rowDiv.querySelector('.item-category').value = cat;
-        if (vendor) rowDiv.querySelector('.item-vendor').value = vendor;
-        if (packaging) rowDiv.querySelector('.item-packaging').value = packaging;
-        if (buyPrice !== '') rowDiv.querySelector('.item-buy-price').value = buyPrice;
-        if (sellPrice !== '') rowDiv.querySelector('.item-price').value = sellPrice;
-        if (note !== '') rowDiv.querySelector('.item-note').value = note;
-        
-        updateSubcatUI(rowDiv.querySelector('.item-category'), subCat);
-    }
-
-    function clearForm() {
-        document.getElementById('customerName').value = '';
-        document.getElementById('billNo').value = getTodayBillPrefix();
-        document.getElementById('paymentMode').value = 'Cash';
-        document.getElementById('carryBag').value = 'Paper Pouch';
-
-        document.getElementById('itemsContainer').innerHTML = '';
-        addItemRow();
-        editingId = null;
-        
-        document.getElementById('formTitle').textContent = "New Sale Entry";
-        document.getElementById('saveBtn').textContent = "Add Sale";
-        document.getElementById('cancelEditBtn').style.display = "none";
-        document.getElementById('deleteEntryBtn').style.display = "none";
-        document.getElementById('customerName').focus();
-    }
-
-    function getNextSerial() {
-    return salesData.length + 1;
-}
-
-    function saveSale() {
-        const nameInput = document.getElementById('customerName').value.trim();
-        const billNo = document.getElementById('billNo').value.trim();
-        const paymentMode = document.getElementById('paymentMode').value;
-        const carryBag = document.getElementById('carryBag').value;
-        
-        let currentSerialNo;
-        if (editingId) {
-            const existing = salesData.find(s => s.id === editingId);
-            currentSerialNo = existing.serialNo || getNextSerial();
-        } else {
-            currentSerialNo = getNextSerial(); 
-        }
-
-        let customerName = nameInput === "" ? `Customer #${currentSerialNo}` : nameInput;
-
-        const rows = document.querySelectorAll('.item-row');
-        let items = [];
-        let total = 0;
-        let totalCost = 0;
-        let totalProfit = 0;
-
-        rows.forEach(row => {
-            const category = row.querySelector('.item-category').value;
-            const subCategoryNode = row.querySelector('.item-subcat');
-            const subCategory = subCategoryNode ? subCategoryNode.value.trim() : '';
-            const vendor = row.querySelector('.item-vendor').value;
-            const note = row.querySelector('.item-note').value.trim();
-            const packaging = row.querySelector('.item-packaging').value;
-            const buyPrice = parseFloat(row.querySelector('.item-buy-price').value) || 0;
-            const price = parseFloat(row.querySelector('.item-price').value) || 0;
-            
-            if (price > 0 || buyPrice > 0) {
-                const profit = price - buyPrice;
-                items.push({ category, subCategory, vendor, note, buyPrice, price, profit, packaging });
-                total += price;
-                totalCost += buyPrice;
-                totalProfit += profit;
-            }
-        });
-
-        if (items.length === 0) {
-            alert("Please add at least one item with a valid price.");
-            return;
-        }
-
-        const saleRecord = {
-            id: editingId ? editingId : Date.now(),
-            serialNo: currentSerialNo,
-            timestamp: editingId ? salesData.find(s => s.id === editingId).timestamp : new Date().toISOString(),
-            customerName,
-            billNo,
-            paymentMode,
-            carryBag,
-            items,
-            total,
-            totalCost,
-            totalProfit
+    const editId = document.getElementById('edit-id').value;
+    const items = Array.from(document.querySelectorAll('.item-entry')).map(entry => {
+        const buyVal = entry.querySelector('.item-buy').value;
+        return {
+            cat: entry.querySelector('.item-cat').value,
+            subcat: entry.querySelector('.item-subcat').value,
+            vendor: entry.querySelector('.item-vendor').value || 'NA',
+            buy: buyVal ? parseFloat(buyVal) : 'NA',
+            sell: parseFloat(entry.querySelector('.item-sell').value),
+            pkg: entry.querySelector('.item-pkg').value || 'NA',
+            note: entry.querySelector('.item-note').value || ''
         };
+    });
 
-        if (editingId) {
-            const index = salesData.findIndex(s => s.id === editingId);
-            if (index !== -1) salesData[index] = saleRecord;
-        } else {
-            salesData.unshift(saleRecord);
-        }
+    let custName = document.getElementById('cust-name').value.trim();
+    let rawBill = document.getElementById('bill-no').value.trim();
+    if(rawBill === getBillPrefix()) rawBill += "NA"; 
 
-        localStorage.setItem('salesData', JSON.stringify(salesData));
-        clearForm();
-        renderTable();
-        calculateTodaySale();
+    const saleRecord = {
+        id: editId || Date.now().toString(),
+        timestamp: new Date().toISOString(),
+        customerName: custName,
+        billNo: rawBill,
+        paymentMode: document.getElementById('payment-mode').value || 'NA',
+        discount: parseFloat(document.getElementById('discount-total').value) || 0,
+        items: items
+    };
+
+    if (editId) {
+        const idx = sales.findIndex(s => s.id === editId);
+        if (idx !== -1) sales[idx] = saleRecord;
+    } else {
+        sales.push(saleRecord);
     }
 
-    function editSale(id) {
-        const sale = salesData.find(s => s.id === id);
-        if (!sale) return;
+    isExported = false;
+    updateExportWipeUI();
+    saveState();
+    resetForm();
+});
 
-        document.getElementById('customerName').value = sale.customerName;
-        document.getElementById('billNo').value = sale.billNo || getTodayBillPrefix();
-        document.getElementById('paymentMode').value = sale.paymentMode || 'Cash';
-        document.getElementById('carryBag').value = sale.carryBag || 'Paper Pouch';
+document.getElementById('btn-delete-sale').addEventListener('click', () => {
+    const editId = document.getElementById('edit-id').value;
+    if (editId && confirm('Delete this sale permanently?')) {
+        sales = sales.filter(s => s.id !== editId);
+        isExported = false;
+        updateExportWipeUI();
+        saveState();
+        resetForm();
+    }
+});
 
-        document.getElementById('itemsContainer').innerHTML = '';
+const loadSaleIntoForm = (id) => {
+    const sale = sales.find(s => s.id === id);
+    if (!sale) return;
+
+    document.getElementById('form-title').innerText = 'Edit Sale';
+    document.getElementById('edit-id').value = sale.id;
+    document.getElementById('cust-name').value = sale.customerName;
+    document.getElementById('bill-no').value = sale.billNo;
+    
+    const payMode = document.getElementById('payment-mode');
+    payMode.value = sale.paymentMode === 'NA' ? '' : sale.paymentMode;
+    if(payMode.value) payMode.classList.remove('placeholder-active');
+    
+    document.getElementById('discount-total').value = sale.discount || '';
+
+    itemsContainer.innerHTML = '';
+    sale.items.forEach(item => { itemsContainer.appendChild(createItemEntryHTML(item)); });
+    refreshFormItemNumbers();
+
+    document.getElementById('btn-submit-sale').innerText = 'Update Sale';
+    document.getElementById('btn-delete-sale').style.display = 'block';
+};
+
+const renderStats = () => {
+    let totalsale = 0, totalcost = 0;
+    sales.forEach(s => {
+        let itemsSum = s.items.reduce((acc, it) => acc + it.sell, 0);
+        let itemsCost = s.items.reduce((acc, it) => acc + (it.buy === 'NA' ? 0 : it.buy), 0);
+        totalsale += (itemsSum - s.discount);
+        totalcost += itemsCost;
+    });
+    let totalprofit = totalsale - totalcost;
+
+    document.getElementById('val-total').innerText = hiddenMode ? '***' : formatCurrency(totalsale);
+    document.getElementById('val-profit').innerText = hiddenMode ? '***' : formatCurrency(totalprofit);
+    document.getElementById('val-cost').innerText = hiddenMode ? '***' : formatCurrency(totalcost);
+    document.getElementById('val-cust').innerText = sales.length;
+};
+
+const renderTable = () => {
+    const tbody = document.getElementById('sales-tbody');
+    tbody.innerHTML = '';
+
+    // Render in reverse order so latest customer is on top
+    for (let index = sales.length - 1; index >= 0; index--) {
+        const sale = sales[index];
+        const srNo = index + 1;
+        const cName = sale.customerName || `Customer #${srNo}`;
+        const dateObj = new Date(sale.timestamp);
+        const timeStr = `${dateObj.toLocaleDateString('en-GB')} <br> <span style="color:var(--text-main)">${dateObj.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: true})}</span>`;
         
-        sale.items.forEach(item => {
-            addItemRow(
-                item.category, 
-                item.subCategory || '', 
-                item.price, 
-                item.buyPrice || '', 
-                item.vendor || 'Self', 
-                item.note || '', 
-                item.packaging || 'Packet'
-            );
-        });
+        const itemSum = sale.items.reduce((acc, it) => acc + it.sell, 0);
+        const finalTotal = itemSum - sale.discount;
 
-        editingId = id;
-        document.getElementById('formTitle').textContent = `Edit Sale Entry #${sale.serialNo || 'Old'}`;
-        document.getElementById('saveBtn').textContent = "Update Sale";
-        document.getElementById('cancelEditBtn').style.display = "inline-block";
-        document.getElementById('deleteEntryBtn').style.display = "inline-block";
-        
-        document.querySelector('.left-panel').scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function deleteCurrentSale() {
-    if (!editingId) return;
-    if(confirm("Are you sure you want to delete this entry?")) {
-        salesData = salesData.filter(s => s.id !== editingId);
-        
-        // Re-index serial numbers sequentially
-        salesData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-        salesData.forEach((sale, index) => {
-            const oldSerial = sale.serialNo;
-            const newSerial = index + 1;
-            sale.serialNo = newSerial;
-            if (sale.customerName === `Customer #${oldSerial}`) {
-                sale.customerName = `Customer #${newSerial}`;
-            }
-        });
-        salesData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-        localStorage.setItem('salesData', JSON.stringify(salesData));
-        clearForm();
-        renderTable();
-        calculateTodaySale();
-    }
-}
-    function clearAllData() {
-        if(confirm("🚨 WARNING: Are you sure you want to delete ALL sales data? This cannot be undone!")) {
-            if(confirm("Are you absolutely sure? All records will be permanently lost.")) {
-                salesData = [];
-                localStorage.removeItem('salesData');
-                clearForm();
-                renderTable();
-                calculateTodaySale();
-                alert("All data has been cleared.");
-            }
-        }
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('salesTableBody');
-        tbody.innerHTML = '';
-
-        salesData.forEach(sale => {
-            const dateObj = new Date(sale.timestamp);
-            const dateStr = dateObj.toLocaleDateString([], {month:'short', day:'numeric'}) + '<br><span style="font-size:0.65rem; color:var(--text-muted);">' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + '</span>';
-            const serialDisplay = sale.serialNo ? sale.serialNo : '-';
-
-            let saleTotal = sale.total || 0;
-            let saleProfit = sale.totalProfit !== undefined ? sale.totalProfit : sale.items.reduce((acc, item) => acc + (item.price - (item.buyPrice || 0)), 0);
-
-            let itemsHTML = '<ul class="item-list">';
-            sale.items.forEach(item => {
-                const catString = item.subCategory ? `${item.category} > ${item.subCategory}` : item.category;
-                const noteStr = item.note ? `<span class="desc-text" style="margin-left: 4px;">(${item.note})</span>` : '';
-                const vendorTag = `<span class="info-box" style="background-color: rgba(142, 142, 147, 0.15);">👤 ${item.vendor || 'Self'}</span>`;
-                const buyTag = `<span class="desc-text">Buy: ₹${(item.buyPrice || 0).toFixed(2)}</span>`;
-                const sellTag = `<span class="info-box info-amount">Sell: ₹${item.price.toFixed(2)}</span>`;
-                const itemProfit = item.price - (item.buyPrice || 0);
-                const profitTag = `<span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736;">Profit: ₹${itemProfit.toFixed(2)}</span>`;
-                const packTag = item.packaging ? `<span class="desc-text" style="margin-left: 4px;">[📦 ${item.packaging}]</span>` : '';
-
-                itemsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted var(--border-color); display: flex; flex-direction: column; gap: 4px;">
-                    <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                        <span class="info-box info-cat">${catString}</span>
-                        ${vendorTag}
-                        ${packTag}
-                        ${noteStr}
+        let itemsHtml = '';
+        sale.items.forEach((it, itemIdx) => {
+            const profit = it.sell - (it.buy === 'NA' ? 0 : it.buy);
+            itemsHtml += `
+                <div class="item-summary-block">
+                    <div class="summary-badge-line">
+                        <span class="item-num-circle">${itemIdx + 1}</span>
+                        <span class="sm-badge bg-grey">${it.cat} > ${it.subcat}</span>
+                        ${it.pkg !== 'NA' ? `<span class="sm-badge bg-blue">${it.pkg}</span>` : ''}
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        ${buyTag}
-                        ${sellTag}
-                        ${profitTag}
+                    <div class="summary-badge-line">
+                        ${it.vendor !== 'NA' ? `<span class="sm-badge bg-grey">${it.vendor}</span>` : ''}
+                        <span class="sm-badge bg-red">Buy: ${it.buy === 'NA' ? 'NA' : '₹'+it.buy}</span>
+                        <span class="sm-badge bg-green">Sell: ₹${it.sell}</span>
+                        <span class="sm-badge bg-green">Profit: ₹${profit}</span>
                     </div>
-                </li>`;
-            });
-            itemsHTML += '</ul>';
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><span class="info-box info-sno">#${serialDisplay}</span></td>
-                <td><span class="info-date" style="padding: 2px 4px; border-radius:3px;">${dateStr}</span></td>
-                <td>
-                    <div style="display:flex; align-items:center; gap: 6px;">
-                        <strong style="font-size: 0.85rem;">${sale.customerName}</strong>
-                        <button type="button" class="icon-btn" title="Edit Sale" onclick="editSale(${sale.id})" style="font-size: 0.65rem; padding: 2px; color: var(--accent-blue);">✏️</button>
-                    </div>
-                    <div class="desc-text" style="margin-top: 4px; line-height: 1.5;">
-                        <span style="font-weight: 600; color: var(--text-main);">Bill No:</span> ${sale.billNo || '-'}<br>
-                        <span style="font-weight: 600; color: var(--text-main);">Payment:</span> ${sale.paymentMode || 'N/A'}<br>
-                        <span style="font-weight: 600; color: var(--text-main);">Carry Bag:</span> ${sale.carryBag || '-'}
-                    </div>
-                </td>
-                <td>${itemsHTML}</td>
-                <td><span class="info-box info-amount" style="font-size: 0.8rem;">₹${saleTotal.toFixed(2)}</span></td>
-                <td><span class="info-box" style="background-color: rgba(52, 199, 89, 0.15); color: #208736; font-size: 0.8rem;">₹${saleProfit.toFixed(2)}</span></td>
+                    ${it.note ? `<div style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">Note: ${it.note}</div>` : ''}
+                </div>
             `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    function calculateTodaySale() {
-        const today = new Date().toLocaleDateString();
-        let totalSale = 0;
-        let totalCost = 0;
-        let totalProfit = 0;
-        let customerCount = 0;
-        
-        salesData.forEach(sale => {
-            const saleDate = new Date(sale.timestamp).toLocaleDateString();
-            if (saleDate === today) {
-                customerCount++;
-                sale.items.forEach(item => {
-                    const bPrice = item.buyPrice || 0;
-                    const sPrice = item.price || 0;
-                    totalSale += sPrice;
-                    totalCost += bPrice;
-                    totalProfit += (sPrice - bPrice);
-                });
-            }
         });
 
-        document.getElementById('todayCustomerCount').textContent = customerCount;
+        if (sale.discount > 0) itemsHtml += `<div class="summary-badge-line"><span class="sm-badge bg-red">Disc Applied: ₹${sale.discount}</span></div>`;
 
-        const valSpan = document.getElementById('todayTotalValue');
-        const profitSpan = document.getElementById('todayProfitValue');
-        const costSpan = document.getElementById('todayCostValue');
-
-        if (saleVisible) {
-            valSpan.textContent = `₹${totalSale.toFixed(2)}`;
-            profitSpan.textContent = `₹${totalProfit.toFixed(2)}`;
-            costSpan.textContent = `₹${totalCost.toFixed(2)}`;
-        } else {
-            valSpan.textContent = "****";
-            profitSpan.textContent = "****";
-            costSpan.textContent = "****";
-        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="font-weight: 700; color:var(--text-main);">#${srNo}</td>
+            <td style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">${timeStr}</td>
+            <td class="td-customer">
+                <div class="cust-name">${cName} 
+                    <button class="row-edit-btn" onclick="loadSaleIntoForm('${sale.id}')" title="Edit">
+                        <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    </button>
+                </div>
+                <div class="cust-details">Bill No.: <span style="color:var(--text-main); font-weight: 600;">${sale.billNo}</span></div>
+                <div class="cust-details">Payment Mode: <span style="color:var(--text-main); font-weight: 600;">${sale.paymentMode}</span></div>
+            </td>
+            <td>${itemsHtml}</td>
+            <td style="vertical-align: middle;"><span class="lg-badge bg-green">${formatCurrency(finalTotal)}</span></td>
+        `;
+        tbody.appendChild(tr);
     }
+    document.getElementById('btn-export').innerText = `Close Sale (${sales.length})`;
+};
 
-    function exportToExcel() {
-        if(salesData.length === 0) {
-            alert("No data to export!");
-            return;
-        }
+const renderAll = () => { renderStats(); renderTable(); };
 
-        let csvContent = "S.No.,Date,Time,Customer Name,Bill No,Payment Mode,Carry Bag,Item Category,Item Type,Item Packaging,Vendor,Buy Price,Sell Price,Profit,Extra Note,Sale Total,Sale Profit\n";
+const updateExportWipeUI = () => {
+    const wipeBtn = document.getElementById('btn-wipe');
+    if (isExported && sales.length > 0) {
+        wipeBtn.disabled = false; wipeBtn.classList.add('enabled');
+    } else {
+        wipeBtn.disabled = true; wipeBtn.classList.remove('enabled');
+    }
+};
 
-        salesData.forEach(sale => {
-            const dateObj = new Date(sale.timestamp);
-            const date = dateObj.toLocaleDateString();
-            const time = dateObj.toLocaleTimeString();
-            const customer = `"${sale.customerName.replace(/"/g, '""')}"`;
-            const billNo = `"${(sale.billNo || '').replace(/"/g, '""')}"`;
-            const paymentMode = `"${(sale.paymentMode || '').replace(/"/g, '""')}"`;
-            const carryBag = `"${(sale.carryBag || '').replace(/"/g, '""')}"`;
-            const sno = sale.serialNo || '';
-            const total = sale.total.toFixed(2);
-            const saleProfit = (sale.totalProfit !== undefined ? sale.totalProfit : sale.items.reduce((acc, i) => acc + (i.price - (i.buyPrice || 0)), 0)).toFixed(2);
-
-            sale.items.forEach((item, index) => {
-                const subCatData = item.subCategory || '';
-                const noteData = item.note || '';
-                const itemVendor = `"${(item.vendor || 'Self').replace(/"/g, '""')}"`;
-                const packaging = `"${(item.packaging || 'Packet').replace(/"/g, '""')}"`;
-
-                const cat = item.category;
-                const type = `"${subCatData.replace(/"/g, '""')}"`;
-                const note = `"${noteData.replace(/"/g, '""')}"`;
-                const buyPrice = (item.buyPrice || 0).toFixed(2);
-                const sellPrice = item.price.toFixed(2);
-                const profit = (item.price - (item.buyPrice || 0)).toFixed(2);
-                
-                const displayTotal = (index === sale.items.length - 1) ? total : "";
-                const displaySaleProfit = (index === sale.items.length - 1) ? saleProfit : "";
-                
-                csvContent += `${sno},${date},${time},${customer},${billNo},${paymentMode},${carryBag},${cat},${type},${packaging},${itemVendor},${buyPrice},${sellPrice},${profit},${note},${displayTotal},${displaySaleProfit}\n`;
-            });
+document.getElementById('btn-export').addEventListener('click', () => {
+    if (sales.length === 0) return alert("No data to export!");
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Sr,Timestamp,Customer,Bill No,Payment Mode,Total Sale,Discount,Item Category,Item Subcategory,Vendor,Buy Price,Sell Price,Packaging,Note\n";
+    
+    sales.forEach((s, i) => {
+        const sr = i + 1;
+        const cName = s.customerName || `Customer #${sr}`;
+        const time = new Date(s.timestamp).toLocaleString().replace(/,/g, '');
+        s.items.forEach((it, idx) => {
+            const isFirst = idx === 0;
+            const row = [
+                isFirst ? sr : "", isFirst ? time : "", isFirst ? `"${cName}"` : "", isFirst ? s.billNo : "",
+                isFirst ? s.paymentMode : "", isFirst ? s.items.reduce((a, b) => a + b.sell, 0) - s.discount : "",
+                isFirst ? s.discount : "", `"${it.cat}"`, `"${it.subcat}"`, `"${it.vendor}"`,
+                it.buy, it.sell, `"${it.pkg}"`, `"${it.note}"`
+            ];
+            csvContent += row.join(",") + "\n";
         });
+    });
 
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        
-        link.setAttribute("href", url);
-        link.setAttribute("download", `Sales_Export_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Sales_Close_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    isExported = true;
+    updateExportWipeUI();
+});
+
+document.getElementById('btn-wipe').addEventListener('click', () => {
+    if (isExported && confirm("WIPE all data? This cannot be undone.")) {
+        sales = []; isExported = false;
+        saveState(); resetForm(); updateExportWipeUI();
     }
+});
+
+applyTheme();
+resetForm();
+renderAll();
+updateExportWipeUI();
+
 </script>
 </body>
 </html>

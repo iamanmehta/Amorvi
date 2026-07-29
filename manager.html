@@ -15,7 +15,7 @@
             --primary: #007aff;
             --danger: #ff3b30;
             --success: #34c759;
-            --focus-border: #000000; /* Black highlight for focus */
+            --focus-border: #000000; /* Black highlight for focused field */
             --badge-grey: #f2f2f7;
             --badge-grey-text: #1c1c1e;
             --badge-blue: #007aff15;
@@ -128,7 +128,7 @@
             display: none;
             text-align: center;
             width: 180px;
-            margin-bottom: 0; /* Reset for topbar */
+            margin-bottom: 0;
         }
 
         .topbar-right {
@@ -196,16 +196,24 @@
             letter-spacing: 0.2px;
         }
 
-        .form-group {
-            margin-bottom: 4px;
+        /* Customer Row Layout (Restored side-by-side layout) */
+        .form-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        /* Independent, symmetrical fields (one per line) */
+        .form-row > * {
+            flex: 1;
+            margin-bottom: 0 !important;
+        }
+
+        /* Base Input & Select Styling */
         input, select {
             display: block;
             width: 100%;
-            padding: 8px 10px; /* Thicker padding for clear symmetry */
-            margin-bottom: 8px; /* Independent space between boxes */
+            padding: 8px 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--border);
             border-radius: 4px;
             background-color: var(--card-bg);
@@ -216,7 +224,7 @@
             transition: border-color 0.1s, box-shadow 0.1s;
         }
 
-        /* Strong Focus Outline for clarity */
+        /* Prominent Focus Outline */
         input:focus, select:focus { 
             border-color: var(--focus-border) !important;
             box-shadow: 0 0 0 1px var(--focus-border) !important; 
@@ -252,6 +260,7 @@
             background-color: #1c1c1e;
         }
 
+        /* Single-line item form layout */
         .item-entry {
             background-color: var(--badge-grey);
             border: 1px solid var(--border);
@@ -261,8 +270,12 @@
             position: relative;
         }
 
+        .item-entry input, .item-entry select {
+            margin-bottom: 8px;
+        }
+
         .item-entry input:last-child {
-            margin-bottom: 0; /* Remove bottom margin for the last input in item block */
+            margin-bottom: 0;
         }
 
         .item-header-label {
@@ -477,9 +490,12 @@
             <form id="sale-form">
                 <input type="hidden" id="edit-id" value="">
                 
-                <div class="form-group">
+                <!-- Customer Details Options (Side-by-side rows as before) -->
+                <div class="form-row">
                     <input type="text" id="cust-name" placeholder="Customer Name">
                     <input type="text" id="bill-no" placeholder="Bill No." required>
+                </div>
+                <div class="form-row">
                     <select id="payment-mode" class="placeholder-active" required onchange="this.classList.remove('placeholder-active')">
                         <option value="" hidden selected>Choose payment mode</option>
                         <option value="Cash">Cash</option>
@@ -489,7 +505,7 @@
                     <input type="number" step="any" id="discount-total" placeholder="Discount (Total)">
                 </div>
 
-                <h3 style="margin-top: 6px;">Items</h3>
+                <h3 style="margin-top: 10px;">Items</h3>
                 <div id="items-container">
                     <!-- Dynamic item entries -->
                 </div>
@@ -505,7 +521,6 @@
             <div class="table-header">
                 <h3 style="margin:0;">Sales Data</h3>
                 <div class="table-actions">
-                    <!-- Changed to simple "Close Sale" -->
                     <button class="btn btn-export" id="btn-export">Close Sale</button>
                     <button class="btn btn-wipe" id="btn-wipe" disabled>Wipe Data</button>
                 </div>
@@ -681,7 +696,7 @@ godlineText.addEventListener('click', () => {
     if (editMode) toggleGodlineEdit();
 });
 
-// Helper to refresh Item Numbers in Form
+// Refresh Item Labels
 const refreshFormItemNumbers = () => {
     const entries = document.querySelectorAll('.item-entry');
     entries.forEach((entry, index) => {
@@ -718,7 +733,7 @@ const createItemEntryHTML = (data = null) => {
 
     const div = document.createElement('div');
     div.className = 'item-entry';
-    // Removed <div class="row"> structures so items stack one per line
+    // Single-line stacked inputs per item block
     div.innerHTML = `
         <div class="item-header-label">
             <span class="item-index-tag">Item 1</span>
@@ -892,7 +907,6 @@ const renderTable = () => {
     const tbody = document.getElementById('sales-tbody');
     tbody.innerHTML = '';
 
-    // Render in reverse order so latest customer is on top
     for (let index = sales.length - 1; index >= 0; index--) {
         const sale = sales[index];
         const srNo = index + 1;

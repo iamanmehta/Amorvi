@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager</title>
+    <title>Jewelry Sales Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --primary: #007aff;
             --danger: #ff3b30;
             --success: #34c759;
+            --focus-border: #000000; /* Black highlight for focus */
             --badge-grey: #f2f2f7;
             --badge-grey-text: #1c1c1e;
             --badge-blue: #007aff15;
@@ -33,6 +34,7 @@
             --text-main: #ffffff;
             --text-muted: #98989d;
             --border: #38383a;
+            --focus-border: #ffffff; /* White highlight for dark mode */
             --badge-grey: #2c2c2e;
             --badge-grey-text: #ffffff;
             --badge-blue: #0a84ff25;
@@ -126,6 +128,7 @@
             display: none;
             text-align: center;
             width: 180px;
+            margin-bottom: 0; /* Reset for topbar */
         }
 
         .topbar-right {
@@ -137,7 +140,7 @@
         .brand-name {
             font-family: 'Montserrat', sans-serif;
             font-size: 13px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             font-weight: 700;
             margin-right: 5px;
         }
@@ -188,29 +191,21 @@
         h2, h3 {
             font-size: 12px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: var(--text-main);
             letter-spacing: 0.2px;
         }
 
         .form-group {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
-        .row {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 6px;
-        }
-        
-        .row > * {
-            flex: 1;
-            min-width: 0;
-        }
-
+        /* Independent, symmetrical fields (one per line) */
         input, select {
+            display: block;
             width: 100%;
-            padding: 5px 6px;
+            padding: 8px 10px; /* Thicker padding for clear symmetry */
+            margin-bottom: 8px; /* Independent space between boxes */
             border: 1px solid var(--border);
             border-radius: 4px;
             background-color: var(--card-bg);
@@ -218,8 +213,17 @@
             font-size: 11px;
             font-weight: 600;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.1s, box-shadow 0.1s;
         }
+
+        /* Strong Focus Outline for clarity */
+        input:focus, select:focus { 
+            border-color: var(--focus-border) !important;
+            box-shadow: 0 0 0 1px var(--focus-border) !important; 
+        }
+        
+        input::placeholder { color: var(--text-muted); font-weight: 500; }
+        .placeholder-active { color: var(--text-muted); }
 
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
@@ -233,9 +237,9 @@
             -webkit-appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg fill="%236e6e73" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
             background-repeat: no-repeat;
-            background-position: right 2px center;
+            background-position: right 8px center;
             background-size: 14px;
-            padding-right: 18px;
+            padding-right: 28px;
         }
         
         select option {
@@ -248,24 +252,24 @@
             background-color: #1c1c1e;
         }
 
-        input:focus, select:focus { border-color: var(--primary); }
-        input::placeholder { color: var(--text-muted); font-weight: 500; }
-        .placeholder-active { color: var(--text-muted); }
-
         .item-entry {
             background-color: var(--badge-grey);
             border: 1px solid var(--border);
-            padding: 8px;
+            padding: 10px;
             border-radius: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             position: relative;
+        }
+
+        .item-entry input:last-child {
+            margin-bottom: 0; /* Remove bottom margin for the last input in item block */
         }
 
         .item-header-label {
             font-size: 10px;
             font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -276,8 +280,8 @@
             border: 1px solid var(--border);
             color: var(--danger);
             border-radius: 50%;
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -286,7 +290,7 @@
         .remove-item svg { width: 10px; height: 10px; stroke-width: 3; }
 
         .btn {
-            padding: 6px 10px;
+            padding: 8px 10px;
             border: none;
             border-radius: 4px;
             font-size: 11px;
@@ -474,19 +478,15 @@
                 <input type="hidden" id="edit-id" value="">
                 
                 <div class="form-group">
-                    <div class="row">
-                        <input type="text" id="cust-name" placeholder="Customer Name">
-                        <input type="text" id="bill-no" placeholder="Bill No." required>
-                    </div>
-                    <div class="row">
-                        <select id="payment-mode" class="placeholder-active" onchange="this.classList.remove('placeholder-active')">
-                            <option value="" hidden selected>Choose payment mode</option>
-                            <option value="Cash">Cash</option>
-                            <option value="Card">Card</option>
-                            <option value="UPI">UPI</option>
-                        </select>
-                        <input type="number" step="any" id="discount-total" placeholder="Discount (Total)">
-                    </div>
+                    <input type="text" id="cust-name" placeholder="Customer Name">
+                    <input type="text" id="bill-no" placeholder="Bill No." required>
+                    <select id="payment-mode" class="placeholder-active" required onchange="this.classList.remove('placeholder-active')">
+                        <option value="" hidden selected>Choose payment mode</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Card">Card</option>
+                        <option value="UPI">UPI</option>
+                    </select>
+                    <input type="number" step="any" id="discount-total" placeholder="Discount (Total)">
                 </div>
 
                 <h3 style="margin-top: 6px;">Items</h3>
@@ -505,6 +505,7 @@
             <div class="table-header">
                 <h3 style="margin:0;">Sales Data</h3>
                 <div class="table-actions">
+                    <!-- Changed to simple "Close Sale" -->
                     <button class="btn btn-export" id="btn-export">Close Sale</button>
                     <button class="btn btn-wipe" id="btn-wipe" disabled>Wipe Data</button>
                 </div>
@@ -717,24 +718,19 @@ const createItemEntryHTML = (data = null) => {
 
     const div = document.createElement('div');
     div.className = 'item-entry';
+    // Removed <div class="row"> structures so items stack one per line
     div.innerHTML = `
         <div class="item-header-label">
             <span class="item-index-tag">Item 1</span>
             <button type="button" class="remove-item" title="Remove Item"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
-        <div class="row">
-            <select class="item-cat ${isCatSelected ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${catOptions}</select>
-            <select class="item-subcat ${data && data.subcat ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${subcatHTML}</select>
-        </div>
-        <div class="row">
-            <select class="item-vendor ${isVenSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${vendorHTML}</select>
-            <input type="number" step="any" class="item-buy" placeholder="Buy Price (109)" value="${data ? (data.buy === 'NA' ? '' : data.buy) : ''}">
-            <input type="number" step="any" class="item-sell" placeholder="Sell Price (449)" required value="${data ? data.sell : ''}">
-        </div>
-        <div class="row">
-            <select class="item-pkg ${isPkgSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${pkgHTML}</select>
-            <input type="text" class="item-note" placeholder="Note (Optional)" value="${data ? data.note : ''}">
-        </div>
+        <select class="item-cat ${isCatSelected ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${catOptions}</select>
+        <select class="item-subcat ${data && data.subcat ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${subcatHTML}</select>
+        <select class="item-vendor ${isVenSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${vendorHTML}</select>
+        <input type="number" step="any" class="item-buy" placeholder="Buy Price (109)" value="${data ? (data.buy === 'NA' ? '' : data.buy) : ''}">
+        <input type="number" step="any" class="item-sell" placeholder="Sell Price (449)" required value="${data ? data.sell : ''}">
+        <select class="item-pkg ${isPkgSelected ? '' : 'placeholder-active'}" onchange="this.classList.remove('placeholder-active')">${pkgHTML}</select>
+        <input type="text" class="item-note" placeholder="Note (Optional)" value="${data ? data.note : ''}">
     `;
 
     const catSelect = div.querySelector('.item-cat');
@@ -790,7 +786,7 @@ document.getElementById('sale-form').addEventListener('submit', (e) => {
     e.preventDefault();
     let isValid = true;
     
-    document.querySelectorAll('.item-cat, .item-subcat, .item-sell').forEach(el => {
+    document.querySelectorAll('#payment-mode, .item-cat, .item-subcat, .item-sell').forEach(el => {
         if (!el.value || el.value.trim() === '') {
             el.style.borderColor = 'var(--danger)';
             isValid = false;
@@ -948,7 +944,6 @@ const renderTable = () => {
         `;
         tbody.appendChild(tr);
     }
-    document.getElementById('btn-export').innerText = `Close Sale`;
 };
 
 const renderAll = () => { renderStats(); renderTable(); };

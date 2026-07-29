@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jewelry Sales Manager</title>
+    <title>Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,7 @@
             --primary: #007aff;
             --danger: #ff3b30;
             --success: #34c759;
-            --focus-border: #000000; /* Black highlight for focused field */
+            --focus-border: #000000;
             --badge-grey: #f2f2f7;
             --badge-grey-text: #1c1c1e;
             --badge-blue: #007aff15;
@@ -34,7 +34,7 @@
             --text-main: #ffffff;
             --text-muted: #98989d;
             --border: #38383a;
-            --focus-border: #ffffff; /* White highlight for dark mode */
+            --focus-border: #ffffff;
             --badge-grey: #2c2c2e;
             --badge-grey-text: #ffffff;
             --badge-blue: #0a84ff25;
@@ -196,7 +196,7 @@
             letter-spacing: 0.2px;
         }
 
-        /* Customer Row Layout (Restored side-by-side layout) */
+        /* Customer Row Layout */
         .form-row {
             display: flex;
             gap: 8px;
@@ -288,6 +288,26 @@
             align-items: center;
         }
         
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .clone-item {
+            background-color: var(--badge-blue);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .clone-item:hover { opacity: 0.8; }
+
         .remove-item {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -490,7 +510,7 @@
             <form id="sale-form">
                 <input type="hidden" id="edit-id" value="">
                 
-                <!-- Customer Details Options (Side-by-side rows as before) -->
+                <!-- Customer Details Options -->
                 <div class="form-row">
                     <input type="text" id="cust-name" placeholder="Customer Name">
                     <input type="text" id="bill-no" placeholder="Bill No." required>
@@ -733,11 +753,13 @@ const createItemEntryHTML = (data = null) => {
 
     const div = document.createElement('div');
     div.className = 'item-entry';
-    // Single-line stacked inputs per item block
     div.innerHTML = `
         <div class="item-header-label">
             <span class="item-index-tag">Item 1</span>
-            <button type="button" class="remove-item" title="Remove Item"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            <div class="item-actions">
+                <button type="button" class="clone-item" title="Clone Item">Clone</button>
+                <button type="button" class="remove-item" title="Remove Item"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+            </div>
         </div>
         <select class="item-cat ${isCatSelected ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${catOptions}</select>
         <select class="item-subcat ${data && data.subcat ? '' : 'placeholder-active'}" required onchange="this.classList.remove('placeholder-active')">${subcatHTML}</select>
@@ -762,6 +784,23 @@ const createItemEntryHTML = (data = null) => {
         }
     });
 
+    // Clone Action
+    div.querySelector('.clone-item').addEventListener('click', () => {
+        const currentData = {
+            cat: div.querySelector('.item-cat').value,
+            subcat: div.querySelector('.item-subcat').value,
+            vendor: div.querySelector('.item-vendor').value || 'NA',
+            buy: div.querySelector('.item-buy').value || 'NA',
+            sell: div.querySelector('.item-sell').value || '',
+            pkg: div.querySelector('.item-pkg').value || 'NA',
+            note: div.querySelector('.item-note').value || ''
+        };
+        const clonedDiv = createItemEntryHTML(currentData);
+        div.insertAdjacentElement('afterend', clonedDiv); // Inserts right below the cloned item
+        refreshFormItemNumbers();
+    });
+
+    // Remove Action
     div.querySelector('.remove-item').addEventListener('click', () => {
         if (document.querySelectorAll('.item-entry').length > 1) { 
             div.remove(); 
